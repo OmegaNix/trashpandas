@@ -2,9 +2,11 @@ import React from "react";
 import ReactDOM from "react-dom";
 import axios from "axios";
 import "./index.css";
-import TimeAgo from 'react-timeago'
-import englishStrings from 'react-timeago/lib/language-strings/en'
-import buildFormatter from 'react-timeago/lib/formatters/buildFormatter'
+import TimeAgo from 'react-timeago';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import englishStrings from 'react-timeago/lib/language-strings/en';
+import buildFormatter from 'react-timeago/lib/formatters/buildFormatter';
+import logo from './logo.png';
 
 class Reddit extends React.Component {
   state = {
@@ -20,28 +22,45 @@ class Reddit extends React.Component {
 
   render() {
     return (
-      <div>
-        <header>
-          <h1 class="header-title">r/trashpandas</h1>
-          <h5 class="header-subtitle">A small portfoio app by Nate Krieger</h5>
+      <div class="container-fluid">
+        <header class="page-header">
+          <div class="row bg-black p-5"></div>
+          <div class="row">
+            <div class="col-xl-2" id="header-left-margin"></div>
+            <div class="col-xl-1 mr-0 pr-0" id="header-left-image">
+              <img class="header-image rounded-circle" src={logo} alt="Panda Icon"/>
+            </div>
+            <div class="col-xl-9 pl-0 header-content" id="header-content p-5">
+              <h1 class="pb-0 mb-0">Trashpandas</h1>
+              <small class="pt-0 mt-0">A small portfoio app by Nate Krieger</small>
+            </div>
+          </div>
         </header>
-        <ul>
-          {this.state.posts.map(post => {
-            return <div class="postcard">
-              <div class="post-left-margin card-content">
-                <div class="post-score">Score {post.score}</div>
-              </div>
-              <div class="post-main card-content">
-                <div class="post-header">Posted by u/{post.author} {post.author_flair_text} <TimeAgo date={post.created} formatter={formatter}/></div>
-                <h4 class="post-title" key={post.id}>{post.title}</h4>
-                <div class="post-body">
-                  <div class="post-body-text">{post.selftext}</div>
-                  <div class="post-body-thumbnail">{doesThumbnailExist(post.thumbnail) ? <img alt="thumbnail" src={post.thumbnail}></img> : <div></div> }</div>
+
+        <div class="row bg-secondary" id="main-container">
+          <div class="col-xl-1 p-0 m-0" id="left-margin"></div>
+          <div class="col-xl-6" id="post-content-container">
+            {<ul class="m-0 p-0">
+              {this.state.posts.map(post => {
+              return <div class="m-0 p-0">
+                <div class="row m-0 mt-3 mb-3 bg-white rounded" id="post">
+                  <div class="col-xl-1 bg-light text-center m-0 p-0 rounded-left" id="score-bar">{post.score}</div>
+                  <div class="col-xl-11" id="post-main">
+                  <div id="post-header">Posted by u/{post.author} {post.author_flair_text} <TimeAgo date={post.created} formatter={formatter}/></div>
+                  <h4 id="post-title" key={post.id}>{post.title}</h4>
+                  <div id="post-body">
+                  <div id="post-body-text">{post.selftext}</div>
+                  <div id="post-body-thumbnail">{doesThumbnailExist(post.thumbnail) ? <img alt="thumbnail" src={post.thumbnail}></img> : <div></div> }</div>
+                  </div>
+                  <div id="post-footer"><a href={"www.reddit.com/" + post.permalink}>{post.num_comments} Comments</a></div>
+                  </div>   
                 </div>
-                <div class="post-footer"><a href={"www.reddit.com/" + post.permalink}>{post.num_comments} Comments</a></div>
-              </div>
-            </div>;})}
-        </ul>
+              </div>;})}
+              </ul>}
+          </div>
+          <div class="col-xl-4 p-0 m-0 border" id="static-content-container"></div>
+          <div class="col-xl-1 p-0 m-0" id="right-margin"></div>
+        </div>
       </div>
     );
   }
