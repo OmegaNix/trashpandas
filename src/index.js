@@ -48,7 +48,7 @@ class Reddit extends React.Component {
                 <div class="row m-0 mt-3 mb-3 bg-white rounded" id="post">
                   <div class="col-xl-1 bg-light text-center m-0 p-0 rounded-left" id="score-bar">{post.score}</div>
                   <div class="col-xl-11" id="post-main">
-                  <div id="post-header">Posted by u/{post.author} {post.author_flair_text} <TimeAgo date={post.created} formatter={formatter}/></div>
+                  <div id="post-header">Posted by u/{post.author} <div class="flairtext d-inline">{post.author_flair_text} </div><TimeAgo date={post.created} formatter={formatter}/></div>
                   <h4 id="post-title" key={post.id}>{post.title}</h4>
                   <div id="post-body">
                   <div id="post-body-text">{post.selftext}</div>
@@ -98,16 +98,21 @@ class Reddit extends React.Component {
             </div>
             <div class="row rounded bg-white m-0 mt-3 mb-3" id="static-mods-card">
               <strong class="row col-xl-12 m-0 bg-secondary p-3 text-white rounded-top">Moderators</strong>
-              <div class="row m-0 p-3">
-                <a href="https://about.reddit.com/" class="d-block modlist-link font-weight-bold m-2">u/GoreFox</a>
-                <a href="https://about.reddit.com/" class="d-block modlist-link font-weight-bold m-2">u/JanetYellensFuckboy</a>
-                <a href="https://about.reddit.com/" class="d-block modlist-link font-weight-bold m-2">u/BotBust</a>
-                <a href="https://about.reddit.com/" class="d-block modlist-link font-weight-bold m-2">u/tsmaster777</a>
-                <a href="https://about.reddit.com/" class="d-block modlist-link font-weight-bold m-2">u/PapaTrashusPandusI</a>
-                <a href="https://about.reddit.com/" class="d-block modlist-link font-weight-bold m-2">u/urbanspacecowboy</a>
-                <a href="https://about.reddit.com/" class="d-block modlist-link font-weight-bold m-2">u/BotTerminator</a>
-                <a href="https://about.reddit.com/" class="d-block modlist-link font-weight-bold m-2">u/BotDefense</a>
+              <div class="row m-0 p-3 d-block">
+                <a href="https://www.reddit.com/user/GoreFox/" class="d-inline modlist-link font-weight-bold m-2">u/GoreFox</a>
+                <label class="bg-flairtext m-1">Trashpanda Enthusiast</label>
+                <a href="https://www.reddit.com/user/JanetYellensFuckboy/" class="d-inline modlist-link font-weight-bold m-2">u/JanetYellensFuckboy</a>
+                <label class="bg-flairtext d-inline m-1">takes credit for Guardia...</label>
+                <a href="https://www.reddit.com/user/BotBust/" class="d-block modlist-link font-weight-bold m-2">u/BotBust</a>
+                <a href="https://www.reddit.com/user/tsmaster777/" class="d-block modlist-link font-weight-bold m-2">u/tsmaster777</a>
+                <a href="https://www.reddit.com/user/PapaTrashusPandusI/" class="d-inline modlist-link font-weight-bold m-2">u/PapaTrashusPandusI</a>
+                <label class="bg-flairtext m-1">Lucipurrrr we are here</label>
+                <a href="https://www.reddit.com/user/urbanspacecowboy/" class="d-block modlist-link font-weight-bold m-2">u/urbanspacecowboy</a>
+                <a href="https://www.reddit.com/user/BotTerminator/" class="d-block modlist-link font-weight-bold m-2">u/BotTerminator</a>
+                <a href="https://www.reddit.com/user/BotDefense/" class="d-block modlist-link font-weight-bold m-2">u/BotDefense</a>
+                <a href="https://www.reddit.com/r/trashpandas/about/moderators/" class="d-block text-right modlist-link font-weight-bold m-3">VIEW ALL MODERATORS</a>
               </div>
+                
             </div>
             <div class="row rounded bg-white m-0 mt-3" id="static-sitenav-card">
                 <div class="col-xl-5 p-3">
