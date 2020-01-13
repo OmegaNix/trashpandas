@@ -7,6 +7,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import englishStrings from 'react-timeago/lib/language-strings/en';
 import buildFormatter from 'react-timeago/lib/formatters/buildFormatter';
 import logo from './logo.png';
+import BirthdayCake from './BirthdayCake.jpg';
+import SidebarPanda from './sidebarpanda.jpg';
 
 class Reddit extends React.Component {
   state = {
@@ -14,7 +16,7 @@ class Reddit extends React.Component {
   };
 
   componentDidMount() {
-    axios.get(`https://www.reddit.com/r/trashpandas.json`).then(res => {
+    axios.get(`https://www.reddit.com/r/trashpandas.json?raw_json=1`).then(res => {
       const posts = res.data.data.children.map(obj => obj.data);
       this.setState({ posts });
     });
@@ -37,9 +39,9 @@ class Reddit extends React.Component {
           </div>
         </header>
 
-        <div class="row bg-secondary" id="main-container">
-          <div class="col-xl-1 p-0 m-0" id="left-margin"></div>
-          <div class="col-xl-6" id="post-content-container">
+        <div class="row bg-background" id="main-container">
+          <div class="col-xl-2 p-0 m-0" id="left-margin"></div>
+          <div class="col-xl-5" id="post-content-container">
             {<ul class="m-0 p-0">
               {this.state.posts.map(post => {
               return <div class="m-0 p-0">
@@ -58,8 +60,86 @@ class Reddit extends React.Component {
               </div>;})}
               </ul>}
           </div>
-          <div class="col-xl-4 p-0 m-0 border" id="static-content-container"></div>
-          <div class="col-xl-1 p-0 m-0" id="right-margin"></div>
+          <div class="col-xl-3 p-0 m-0" id="static-content-container">
+            <div class="row rounded bg-white m-0 mt-3 mb-3" id="static-title-card">
+                <strong class="row col-xl-12 m-0 bg-secondary p-3 text-white rounded-top">About Community</strong>
+                <p class="p-3">Welcome to r/trashpandas: Your home for all things trashpanda-related! Here at r/trashpandas, we strive to share the cutest & *most awesomest* content there is! #🦝🦝🦝🦝🦝🦝🦝🦝🦝🦝🦝</p>
+                <div class="row m-0 p-0 w-100">
+                  <div class="col-xl-5 m-0">
+                    <h5 class="mb-0">229k</h5><small class="mt-0">Members</small>
+                  </div>
+                  <div class="col-xl-7 m-0">
+                    <h5 class="mb-0">130</h5><small class="mt-0">Online</small>
+                  </div>
+                </div>
+                <hr class="row mx-auto" width="90%"></hr>
+                <div class="row w-100 m-0 p-0 mb-3">
+                <img class="col-xl-2 img-fluid m-0" alt="Birthday Cake" src={BirthdayCake}></img>
+                <label class="col-xl-10 p-0 pt-2 h5">Created July 11, 2015</label>
+                </div>
+            </div>       
+            <div class="row rounded bg-white m-0 mt-3 mb-3" id="static-filter-card">
+              <strong class="row col-xl-12 m-0 bg-secondary p-3 text-white rounded-top">Filter by flair</strong>
+              <div class="row m-0 p-3 w-100">
+              {/* fiter buttons here */}
+              </div>
+            </div>
+            <div class="row w-100 m-0 p-0 mb-3">
+                <img src={SidebarPanda} class="img-fluid rounded"></img>
+            </div>
+            <div class="row rounded bg-white m-0 mt-3 mb-3" id="static-rules-card">
+              <strong class="row col-xl-12 m-0 bg-secondary p-3 text-white rounded-top">r/trashpandas Rules</strong>
+              <div class="row m-0 p-3 w-100">
+              {/* rules dropdown here */}
+              </div>
+            </div>
+            <div class="row w-100 m-0 p-0 mb-3">
+                <img src={SidebarPanda} class="img-fluid rounded vertical-flip"></img>
+            </div>
+            <div class="row rounded bg-white m-0 mt-3 mb-3" id="static-mods-card">
+              <strong class="row col-xl-12 m-0 bg-secondary p-3 text-white rounded-top">Moderators</strong>
+              <div class="row m-0 p-3">
+                <a href="https://about.reddit.com/" class="d-block modlist-link font-weight-bold m-2">u/GoreFox</a>
+                <a href="https://about.reddit.com/" class="d-block modlist-link font-weight-bold m-2">u/JanetYellensFuckboy</a>
+                <a href="https://about.reddit.com/" class="d-block modlist-link font-weight-bold m-2">u/BotBust</a>
+                <a href="https://about.reddit.com/" class="d-block modlist-link font-weight-bold m-2">u/tsmaster777</a>
+                <a href="https://about.reddit.com/" class="d-block modlist-link font-weight-bold m-2">u/PapaTrashusPandusI</a>
+                <a href="https://about.reddit.com/" class="d-block modlist-link font-weight-bold m-2">u/urbanspacecowboy</a>
+                <a href="https://about.reddit.com/" class="d-block modlist-link font-weight-bold m-2">u/BotTerminator</a>
+                <a href="https://about.reddit.com/" class="d-block modlist-link font-weight-bold m-2">u/BotDefense</a>
+              </div>
+            </div>
+            <div class="row rounded bg-white m-0 mt-3" id="static-sitenav-card">
+                <div class="col-xl-5 p-3">
+                  <label class="font-weight-bold d-block">Reddit</label>
+                  <a href="https://about.reddit.com/" class="d-block plaintext-link">About</a>
+                  <a href="https://about.reddit.com/careers/" class="d-block plaintext-link">Careers</a>
+                  <a href="https://about.reddit.com/press/" class="d-block plaintext-link">Press</a>
+                  <a href="https://www.redditinc.com/advertising" class="d-block plaintext-link">Advertise</a>
+                  <a href="http://www.redditblog.com/" class="d-block plaintext-link">Blog</a>
+                </div>
+                <div class="col-xl-7 p-3">
+                  <label class="font-weight-bold">Using Reddit</label>
+                  <a href="https://www.reddithelp.com/" class="d-block plaintext-link">Help</a>
+                  <a href="https://www.reddit.com/mobile/download" class="d-bloc plaintext-link">Reddit App</a>
+                  <a href="https://www.reddit.com/coins" class="d-block plaintext-link">Reddit Coins</a>
+                  <a href="https://www.reddit.com/premium" class="d-block plaintext-link">Reddit Premium</a>
+                  <a href="http://redditgifts.com/" class="d-block plaintext-link">Reddit Gifts</a>
+                  <a href="https://www.reddit.com/subreddits/a-1/" class="d-block plaintext-link">Communities</a>
+                  <a href="https://www.reddit.com/posts/a-1/" class="d-block plaintext-link">Top Posts</a>
+                </div>
+                <div class="row m-0 pl-3 mb-3 mt-3 pb-0">
+                  <a href="https://www.redditinc.com/policies/user-agreement" class="plaintext-link mr-2">Terms</a><span>|</span>
+                  <a href="https://www.redditinc.com/policies/content-policy" class="plaintext-link mr-2 ml-2">Content Policy</a><span>|</span>
+                  <a href="https://www.reddit.com/help/privacypolicy" class="plaintext-link mr-2 ml-2">Privacy Policy</a><span>|</span>
+                  <a href="https://www.reddit.com/help/healthycommunities/" class="plaintext-link ml-2">Mod Policy</a>
+                </div>
+                <div class="row m-0 p-2 pl-3 mb-0 mt-0 pt-0">
+                <p>Reddit Inc © 2019. All rights reserved</p>
+                </div>
+            </div>
+          </div>
+          <div class="col-xl-2 p-0 m-0" id="right-margin"></div>
         </div>
       </div>
     );
