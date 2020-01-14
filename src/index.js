@@ -17,6 +17,7 @@ class Reddit extends React.Component {
     posts: []
   };
 
+
   componentDidMount() {
     axios.get(`https://www.reddit.com/r/trashpandas.json?raw_json=1`).then(res => {
       const posts = res.data.data.children.map(obj => obj.data);
@@ -92,9 +93,7 @@ class Reddit extends React.Component {
             <div class="row rounded bg-white m-0 mt-3 mb-3" id="static-rules-card">
               <strong class="row col-xl-12 m-0 bg-secondary p-3 text-white rounded-top">r/trashpandas Rules</strong>
               <ol class="m-1 pl-4 pr-4 pt-2 pb-2 container-fluid">
-                <li class="plaintext">No clickbait titles
-                    <img class="img-fluid float-right mt-2" height="12px" width="12px" src={downcarot}></img>
-                </li>
+                <CollapsableListItem></CollapsableListItem>
                 <hr class="row m-2 mx-auto divider"></hr>
                 <li class="plaintext">All posts must pertain to trashpandas</li>
                 <hr class="row mx-auto m-2"></hr>
@@ -176,6 +175,24 @@ class Reddit extends React.Component {
         </div>
       </div>
     );
+  }
+}
+
+class CollapsableListItem extends React.Component{
+  state = {
+    isMenuCollapsed : "YES"
+  }
+  render(){
+    return <li class="plaintext">No clickbait titles
+    <img class="img-fluid float-right mt-2" height="12px" width="12px" src={downcarot}></img>
+    <div class="d-none" id="menuOne">
+    <label class="m-2">Examples:</label>
+    <ol>
+      <li class="p-1">You won't believe what happens!</li>
+      <li class="p-1">Watch until the end!</li>
+      <li class="p-1">You'll never guess...</li>
+    </ol></div>
+  </li>
   }
 }
 
