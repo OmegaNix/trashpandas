@@ -9,6 +9,8 @@ import buildFormatter from 'react-timeago/lib/formatters/buildFormatter';
 import logo from './logo.png';
 import BirthdayCake from './BirthdayCake.jpg';
 import SidebarPanda from './sidebarpanda.jpg';
+import upcarot from './upcarot.png';
+import downcarot from './downcarot.png';
 
 class Reddit extends React.Component {
   state = {
@@ -48,7 +50,7 @@ class Reddit extends React.Component {
                 <div class="row m-0 mt-3 mb-3 bg-white rounded" id="post">
                   <div class="col-xl-1 bg-light text-center m-0 p-0 rounded-left" id="score-bar">{post.score}</div>
                   <div class="col-xl-11" id="post-main">
-                  <div id="post-header">Posted by u/{post.author} <div class="flairtext d-inline">{post.author_flair_text} </div><TimeAgo date={post.created} formatter={formatter}/></div>
+                  <div id="post-header" class="lightweight-text text-secondary">Posted by u/{post.author} <div class="bg-flairtext text-dark d-inline">{post.author_flair_text} </div><TimeAgo date={post.created} formatter={formatter}/></div>
                   <h4 id="post-title" key={post.id}>{post.title}</h4>
                   <div id="post-body">
                   <div id="post-body-text">{post.selftext}</div>
@@ -89,9 +91,35 @@ class Reddit extends React.Component {
             </div>
             <div class="row rounded bg-white m-0 mt-3 mb-3" id="static-rules-card">
               <strong class="row col-xl-12 m-0 bg-secondary p-3 text-white rounded-top">r/trashpandas Rules</strong>
-              <div class="row m-0 p-3 w-100">
-              {/* rules dropdown here */}
-              </div>
+              <ol class="m-1 pl-4 pr-4 pt-2 pb-2 container-fluid">
+                <li class="plaintext">No clickbait titles
+                    <img class="img-fluid float-right mt-2" height="12px" width="12px" src={downcarot}></img>
+                </li>
+                <hr class="row m-2 mx-auto divider"></hr>
+                <li class="plaintext">All posts must pertain to trashpandas</li>
+                <hr class="row mx-auto m-2"></hr>
+                <li class="plaintext">No dead trashpandas
+                  <img class="img-fluid float-right mt-2" height="12px" width="12px" src={downcarot}></img>
+                </li>
+                <hr class="row mx-auto m-2"></hr>
+                <li class="plaintext">No trashpanda marraige proposals
+                  <img class="img-fluid float-right mt-2" height="12px" width="12px" src={downcarot}></img>
+                </li>
+                <hr class="row mx-auto m-2"></hr>
+                <li class="plaintext">No merchandise</li>
+                <hr class="row mx-auto m-2"></hr>
+                <li class="plaintext">No profanity
+                  <img class="img-fluid float-right mt-2" height="12px" width="12px" src={downcarot}></img>
+                </li>
+                <hr class="row mx-auto m-2"></hr>
+                <li class="plaintext">Keep it apolitical
+                  <img class="img-fluid float-right mt-2" height="12px" width="12px" src={downcarot}></img>
+                </li>
+                <hr class="row mx-auto m-2"></hr>
+                <li class="plaintext">No bamboozlement
+                  <img class="img-fluid float-right mt-2" height="12px" width="12px" src={downcarot}></img>
+                </li>
+              </ol>
             </div>
             <div class="row w-100 m-0 p-0 mb-3">
                 <img src={SidebarPanda} class="img-fluid rounded vertical-flip"></img>
@@ -159,5 +187,6 @@ const doesThumbnailExist = (thumb)=>{
   }
   return true
 }
+
 
 ReactDOM.render(<Reddit />, document.getElementById("root"));
