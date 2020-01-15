@@ -2,17 +2,15 @@ import React from "react";
 import ReactDOM from "react-dom";
 import axios from "axios";
 import "./index.css";
-import TimeAgo from 'react-timeago';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import englishStrings from 'react-timeago/lib/language-strings/en';
-import buildFormatter from 'react-timeago/lib/formatters/buildFormatter';
+import TimeAgo from 'timeago-react';
 import logo from './logo.png';
 import BirthdayCake from './BirthdayCake.jpg';
 import SidebarPanda from './sidebarpanda.jpg';
 import upcarot from './upcarot.png';
 import downcarot from './downcarot.png';
 
-const formatter = buildFormatter(englishStrings);
+
 const removeNulls_Duplicates = (arr)=>{
   var cleanArray = arr.filter((el)=> {
       return el != null;
@@ -21,6 +19,7 @@ const removeNulls_Duplicates = (arr)=>{
   cleanArray = [...cleanSet]
   return cleanArray;
 }
+
 const doesPropertyExist = (prop)=>{
   if(prop == null){
     return false;
@@ -65,7 +64,7 @@ class Reddit extends React.Component{
                 <div class="row m-0 mt-3 mb-3 bg-white rounded">
                   <div class="col-xl-1 bg-light text-center m-0 p-0 rounded-left">{post.score}</div>
                   <div class="col-xl-11" id="post-main">
-                  <div class="lightweight-text text-secondary">Posted by u/{post.author} <div class="bg-flairtext text-dark d-inline">{post.author_flair_text} </div><TimeAgo date={post.created} formatter={formatter}/></div>
+                  <div class="lightweight-text text-secondary">Posted by u/{post.author} <div class="bg-flairtext text-dark d-inline">{post.author_flair_text} </div><TimeAgo datetime={post.created * 1000}/></div>
                   {doesPropertyExist(post.link_flair_text) ? <div class="badge badge-pill p-2 badge-light d-inline p-0 m-0">{post.link_flair_text}</div> : null}
                   <h5 class="pl-0 pt-3 pb-3 d-inline">{post.title}</h5>
                   <PostBody content={post}/>
@@ -184,7 +183,6 @@ class FlairMenu extends React.Component{
   constructor(props){
     super(props);
     this.state = { filterBy : null}
-
   }
 
   render(){
