@@ -93,31 +93,21 @@ class Reddit extends React.Component {
             <div class="row rounded bg-white m-0 mt-3 mb-3" id="static-rules-card">
               <strong class="row col-xl-12 m-0 bg-secondary p-3 text-white rounded-top">r/trashpandas Rules</strong>
               <ol class="m-1 pl-4 pr-4 pt-2 pb-2 container-fluid">
-                <CollapsableListItem></CollapsableListItem>
+                <CollapsableMenuItemOne></CollapsableMenuItemOne>
                 <hr class="row m-2 mx-auto divider"></hr>
                 <li class="plaintext">All posts must pertain to trashpandas</li>
                 <hr class="row mx-auto m-2"></hr>
-                <li class="plaintext">No dead trashpandas
-                  <img class="img-fluid float-right mt-2" height="12px" width="12px" src={downcarot}></img>
-                </li>
+                <CollapsableMenuItemThree></CollapsableMenuItemThree>
                 <hr class="row mx-auto m-2"></hr>
-                <li class="plaintext">No trashpanda marraige proposals
-                  <img class="img-fluid float-right mt-2" height="12px" width="12px" src={downcarot}></img>
-                </li>
+                <CollapsableMenuItemSimple title="No trashpanda marraige proposals" text="No pictures of giving rings to trashpandas. This engagement is off. We've seen this post many times here, and we needn't see it anymore. Just go to Las Vegas."></CollapsableMenuItemSimple>
                 <hr class="row mx-auto m-2"></hr>
                 <li class="plaintext">No merchandise</li>
                 <hr class="row mx-auto m-2"></hr>
-                <li class="plaintext">No profanity
-                  <img class="img-fluid float-right mt-2" height="12px" width="12px" src={downcarot}></img>
-                </li>
+                <CollapsableMenuItemSimple title="No profanity" text="This is a wholesome sub for people of all ages. Please keep profanity to a minimum."></CollapsableMenuItemSimple>
                 <hr class="row mx-auto m-2"></hr>
-                <li class="plaintext">Keep it apolitical
-                  <img class="img-fluid float-right mt-2" height="12px" width="12px" src={downcarot}></img>
-                </li>
+                <CollapsableMenuItemSimple title="Keep it apolitical" linksrc="https://www.reddit.com/r/trashpandas" linktext="r/trashpandas " text="supersede politics. Please don't bring politics into this subreddit."></CollapsableMenuItemSimple>
                 <hr class="row mx-auto m-2"></hr>
-                <li class="plaintext">No bamboozlement
-                  <img class="img-fluid float-right mt-2" height="12px" width="12px" src={downcarot}></img>
-                </li>
+                <CollapsableMenuItemSimple title="No Bamboozlement" text="Any users caught bamboozling us will be banned. Please don't bamboozle."></CollapsableMenuItemSimple>
               </ol>
             </div>
             <div class="row w-100 m-0 p-0 mb-3">
@@ -178,26 +168,76 @@ class Reddit extends React.Component {
   }
 }
 
-class CollapsableListItem extends React.Component{
-  state = {
-    isMenuCollapsed : "YES"
+class CollapsableMenuItemOne extends React.Component{
+  constructor() {
+    super();
+    this.state = {isMenuCollapsed : true}
+    this.handleClick = this.handleClick.bind(this);
+  }
+  handleClick() {
+    this.setState(state => ({
+      isMenuCollapsed: !state.isMenuCollapsed,
+    }));
   }
   render(){
-    return <li class="plaintext">No clickbait titles
-    <img class="img-fluid float-right mt-2" height="12px" width="12px" src={downcarot}></img>
-    <div class="d-none" id="menuOne">
+    return <li class="plaintext" onClick={this.handleClick}>No clickbait titles
+    <img class="img-fluid float-right mt-2" height="12px" width="12px" src={this.state.isMenuCollapsed ? downcarot : upcarot}></img>
+    <div class={this.state.isMenuCollapsed ? "d-none" : ""}>
     <label class="m-2">Examples:</label>
-    <ol>
-      <li class="p-1">You won't believe what happens!</li>
-      <li class="p-1">Watch until the end!</li>
-      <li class="p-1">You'll never guess...</li>
-    </ol></div>
+      <ol>
+        <li class="p-1">You won't believe what happens!</li>
+        <li class="p-1">Watch until the end!</li>
+        <li class="p-1">You'll never guess...</li>
+      </ol>
+    </div>
+  </li>
+  }
+}
+class CollapsableMenuItemThree extends React.Component{
+  constructor() {
+    super();
+    this.state = {isMenuCollapsed : true}
+    this.handleClick = this.handleClick.bind(this);
+  }
+  handleClick() {
+    this.setState(state => ({
+      isMenuCollapsed: !state.isMenuCollapsed,
+    }));
+  }
+  render(){
+    return <li class="plaintext" onClick={this.handleClick}>No dead trashpandas
+    <img class="img-fluid float-right mt-2" height="12px" width="12px" src={this.state.isMenuCollapsed ? downcarot : upcarot}></img>
+    <div class={this.state.isMenuCollapsed ? "d-none" : ""}>
+      <ol>
+        <li class="p-1">Pictures of deceased trashpandas are not permitted in this sub. This includes taxidermied ones. When in doubt: Do not post it.</li>
+        <li class="p-1">Advocating killing or harming trashpandas will not be tolerated.</li>
+      </ol>
+    </div>
+  </li>
+  }
+}
+class CollapsableMenuItemSimple extends React.Component{
+  constructor(props) {
+    super(props);
+    this.state = {isMenuCollapsed : true}
+    this.handleClick = this.handleClick.bind(this);
+  }
+  handleClick() {
+    this.setState(state => ({
+      isMenuCollapsed: !state.isMenuCollapsed,
+    }));
+  }
+  render(){
+    return <li class="plaintext" onClick={this.handleClick}>{this.props.title}
+    <img class="img-fluid float-right mt-2" height="12px" width="12px" src={this.state.isMenuCollapsed ? downcarot : upcarot}></img>
+    <div class={this.state.isMenuCollapsed ? "d-none" : ""}>
+        <p class="m-2"><a href={this.props.linksrc} class="modlist-link">{this.props.linktext}</a>{this.props.text}</p>
+    </div>
   </li>
   }
 }
 
 const formatter = buildFormatter(englishStrings);
-
 const doesThumbnailExist = (thumb)=>{
   if(thumb == "self"){
     return false
