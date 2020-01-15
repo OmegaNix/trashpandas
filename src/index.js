@@ -12,19 +12,33 @@ import SidebarPanda from './sidebarpanda.jpg';
 import upcarot from './upcarot.png';
 import downcarot from './downcarot.png';
 
-class Reddit extends React.Component {
+const formatter = buildFormatter(englishStrings);
+const removeNulls_Duplicates = (arr)=>{
+  var cleanArray = arr.filter((el)=> {
+      return el != null;
+  });
+  const cleanSet = new Set(cleanArray)
+  cleanArray = [...cleanSet]
+  return cleanArray;
+}
+const doesPropertyExist = (prop)=>{
+  if(prop == null){
+    return false;
+  }
+  return true;
+}
+class Reddit extends React.Component{
   state = {
-    posts: []
+    posts: [],
+    flair_tags: [],
   };
-
-
   componentDidMount() {
     axios.get(`https://www.reddit.com/r/trashpandas.json?raw_json=1`).then(res => {
       const posts = res.data.data.children.map(obj => obj.data);
-      this.setState({ posts });
+      const flair_tags = removeNulls_Duplicates(res.data.data.children.map(obj => obj.data.link_flair_text));
+      this.setState({ posts, flair_tags });
     });
   };
-
   render() {
     return (
       <div class="container-fluid">
@@ -47,17 +61,15 @@ class Reddit extends React.Component {
           <div class="col-xl-5" id="post-content-container">
             {<ul class="m-0 p-0">
               {this.state.posts.map(post => {
-              return <div class="m-0 p-0">
-                <div class="row m-0 mt-3 mb-3 bg-white rounded" id="post">
-                  <div class="col-xl-1 bg-light text-center m-0 p-0 rounded-left" id="score-bar">{post.score}</div>
+              return <div class="m-0 p-0" key={post.id}>
+                <div class="row m-0 mt-3 mb-3 bg-white rounded">
+                  <div class="col-xl-1 bg-light text-center m-0 p-0 rounded-left">{post.score}</div>
                   <div class="col-xl-11" id="post-main">
-                  <div id="post-header" class="lightweight-text text-secondary">Posted by u/{post.author} <div class="bg-flairtext text-dark d-inline">{post.author_flair_text} </div><TimeAgo date={post.created} formatter={formatter}/></div>
-                  <h4 id="post-title" key={post.id}>{post.title}</h4>
-                  <div id="post-body">
-                  <div id="post-body-text">{post.selftext}</div>
-                  <div id="post-body-thumbnail">{doesThumbnailExist(post.thumbnail) ? <img alt="thumbnail" src={post.thumbnail}></img> : <div></div> }</div>
-                  </div>
-                  <div id="post-footer"><a href={"www.reddit.com/" + post.permalink}>{post.num_comments} Comments</a></div>
+                  <div class="lightweight-text text-secondary">Posted by u/{post.author} <div class="bg-flairtext text-dark d-inline">{post.author_flair_text} </div><TimeAgo date={post.created} formatter={formatter}/></div>
+                  {doesPropertyExist(post.link_flair_text) ? <div class="badge badge-pill p-2 badge-light d-inline p-0 m-0">{post.link_flair_text}</div> : null}
+                  <h5 class="pl-0 pt-3 pb-3 d-inline">{post.title}</h5>
+                  <PostBody content={post}/>
+                  <a href={"www.reddit.com/" + post.permalink}>{post.num_comments} Comments</a>
                   </div>   
                 </div>
               </div>;})}
@@ -77,41 +89,42 @@ class Reddit extends React.Component {
                 </div>
                 <hr class="row mx-auto" width="90%"></hr>
                 <div class="row w-100 m-0 p-0 mb-3">
-                <img class="col-xl-2 img-fluid m-0" alt="Birthday Cake" src={BirthdayCake}></img>
+                <img class="col-xl-2 img-fluid m-0" alt="Birthday Cake" src={BirthdayCake}/>
                 <label class="col-xl-10 p-0 pt-2 h5">Created July 11, 2015</label>
                 </div>
             </div>       
             <div class="row rounded bg-white m-0 mt-3 mb-3" id="static-filter-card">
               <strong class="row col-xl-12 m-0 bg-secondary p-3 text-white rounded-top">Filter by flair</strong>
               <div class="row m-0 p-3 w-100">
-              {/* fiter buttons here */}
+              {/*FLAIR TAGS*/}
+                <FlairMenu array={this.state.flair_tags}/>
               </div>
             </div>
             <div class="row w-100 m-0 p-0 mb-3">
-                <img src={SidebarPanda} class="img-fluid rounded"></img>
+                <img src={SidebarPanda} class="img-fluid rounded" alt="Smiling Raccoon"/>
             </div>
             <div class="row rounded bg-white m-0 mt-3 mb-3" id="static-rules-card">
               <strong class="row col-xl-12 m-0 bg-secondary p-3 text-white rounded-top">r/trashpandas Rules</strong>
               <ol class="m-1 pl-4 pr-4 pt-2 pb-2 container-fluid">
-                <CollapsableMenuItemOne></CollapsableMenuItemOne>
+                <CollapsableMenuItemOne/>
                 <hr class="row m-2 mx-auto divider"></hr>
                 <li class="plaintext">All posts must pertain to trashpandas</li>
                 <hr class="row mx-auto m-2"></hr>
-                <CollapsableMenuItemThree></CollapsableMenuItemThree>
+                <CollapsableMenuItemThree/>
                 <hr class="row mx-auto m-2"></hr>
-                <CollapsableMenuItemSimple title="No trashpanda marraige proposals" text="No pictures of giving rings to trashpandas. This engagement is off. We've seen this post many times here, and we needn't see it anymore. Just go to Las Vegas."></CollapsableMenuItemSimple>
+                <CollapsableMenuItemSimple title="No trashpanda marraige proposals" text="No pictures of giving rings to trashpandas. This engagement is off. We've seen this post many times here, and we needn't see it anymore. Just go to Las Vegas."/>
                 <hr class="row mx-auto m-2"></hr>
                 <li class="plaintext">No merchandise</li>
                 <hr class="row mx-auto m-2"></hr>
-                <CollapsableMenuItemSimple title="No profanity" text="This is a wholesome sub for people of all ages. Please keep profanity to a minimum."></CollapsableMenuItemSimple>
+                <CollapsableMenuItemSimple title="No profanity" text="This is a wholesome sub for people of all ages. Please keep profanity to a minimum."/>
                 <hr class="row mx-auto m-2"></hr>
-                <CollapsableMenuItemSimple title="Keep it apolitical" linksrc="https://www.reddit.com/r/trashpandas" linktext="r/trashpandas " text="supersede politics. Please don't bring politics into this subreddit."></CollapsableMenuItemSimple>
+                <CollapsableMenuItemSimple title="Keep it apolitical" linksrc="https://www.reddit.com/r/trashpandas" linktext="r/trashpandas " text="supersede politics. Please don't bring politics into this subreddit."/>
                 <hr class="row mx-auto m-2"></hr>
-                <CollapsableMenuItemSimple title="No Bamboozlement" text="Any users caught bamboozling us will be banned. Please don't bamboozle."></CollapsableMenuItemSimple>
+                <CollapsableMenuItemSimple title="No Bamboozlement" text="Any users caught bamboozling us will be banned. Please don't bamboozle."/>
               </ol>
             </div>
             <div class="row w-100 m-0 p-0 mb-3">
-                <img src={SidebarPanda} class="img-fluid rounded vertical-flip"></img>
+                <img src={SidebarPanda} class="img-fluid rounded vertical-flip" alt="Upsidown Smiling Raccoon"/>
             </div>
             <div class="row rounded bg-white m-0 mt-3 mb-3" id="static-mods-card">
               <strong class="row col-xl-12 m-0 bg-secondary p-3 text-white rounded-top">Moderators</strong>
@@ -167,7 +180,37 @@ class Reddit extends React.Component {
     );
   }
 }
+class FlairMenu extends React.Component{
+  constructor(props){
+    super(props);
+    this.state = { filterBy : null}
 
+  }
+
+  render(){
+    return(<div>
+      {<ul class="m-0 p-0">
+        {this.props.array.map(tag => {
+            return <div class="m-0 p-0 d-inline">
+              <div class="badge badge-pill p-2 badge-light d-inline p-0 m-0">{tag}</div>
+            </div>;})}
+        </ul>}
+    </div>
+    )
+  }
+}
+class PostBody extends React.Component{
+  constructor(props){
+    super(props);
+    this.state = {content : this.props.content}
+  }
+  render(){
+    return <div class="container-fluid">
+      {this.state.content.selftext}
+      <img src={this.state.content.thumbnail} alt="thumbnail"/>
+    </div>
+  }
+}
 class CollapsableMenuItemOne extends React.Component{
   constructor() {
     super();
@@ -181,7 +224,7 @@ class CollapsableMenuItemOne extends React.Component{
   }
   render(){
     return <li class="plaintext" onClick={this.handleClick}>No clickbait titles
-    <img class="img-fluid float-right mt-2" height="12px" width="12px" src={this.state.isMenuCollapsed ? downcarot : upcarot}></img>
+    <img class="img-fluid float-right mt-2" height="12px" width="12px" src={this.state.isMenuCollapsed ? downcarot : upcarot} alt={this.state.isMenuCollapsed ? "closed" : "open"}/>
     <div class={this.state.isMenuCollapsed ? "d-none" : ""}>
     <label class="m-2">Examples:</label>
       <ol>
@@ -206,7 +249,7 @@ class CollapsableMenuItemThree extends React.Component{
   }
   render(){
     return <li class="plaintext" onClick={this.handleClick}>No dead trashpandas
-    <img class="img-fluid float-right mt-2" height="12px" width="12px" src={this.state.isMenuCollapsed ? downcarot : upcarot}></img>
+    <img class="img-fluid float-right mt-2" height="12px" width="12px" src={this.state.isMenuCollapsed ? downcarot : upcarot} alt={this.state.isMenuCollapsed ? "closed" : "open"}/>
     <div class={this.state.isMenuCollapsed ? "d-none" : ""}>
       <ol>
         <li class="p-1">Pictures of deceased trashpandas are not permitted in this sub. This includes taxidermied ones. When in doubt: Do not post it.</li>
@@ -229,21 +272,11 @@ class CollapsableMenuItemSimple extends React.Component{
   }
   render(){
     return <li class="plaintext" onClick={this.handleClick}>{this.props.title}
-    <img class="img-fluid float-right mt-2" height="12px" width="12px" src={this.state.isMenuCollapsed ? downcarot : upcarot}></img>
+    <img class="img-fluid float-right mt-2" height="12px" width="12px" src={this.state.isMenuCollapsed ? downcarot : upcarot} alt={this.state.isMenuCollapsed ? "closed" : "open"}/>
     <div class={this.state.isMenuCollapsed ? "d-none" : ""}>
         <p class="m-2"><a href={this.props.linksrc} class="modlist-link">{this.props.linktext}</a>{this.props.text}</p>
     </div>
   </li>
   }
 }
-
-const formatter = buildFormatter(englishStrings);
-const doesThumbnailExist = (thumb)=>{
-  if(thumb == "self"){
-    return false
-  }
-  return true
-}
-
-
-ReactDOM.render(<Reddit />, document.getElementById("root"));
+ReactDOM.render(<Reddit />, document.getElementById("app")); 
