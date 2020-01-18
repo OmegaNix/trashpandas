@@ -17,10 +17,6 @@ html, body {
   position: relative;
   top: -10px;
 }
-.header-content{
-  position: relative;
-  left: -40px;
-}
 .vertical-flip{
   transform: rotate(180deg);
 }
@@ -39,4 +35,68 @@ html, body {
 .icon-right{
   position: relative;
   right: 0px;
+}
+.reddit-button{
+  background-color: #FF4301;
+  border-radius: 5px;
+  color: white;
+  font-family: Verdana, Arial, Helvetica, sans-serif;
+  font-size: .75em;
+  font-weight: 900;
+  box-shadow: 0 0px;
+  border: 0px;
+}
+.reddit-button:hover{
+  opacity: .5;
+}
+.reddit-button:focus{
+  background-color: #CC3700;
+}
+.arrow-up-container{
+  box-shadow: 0 0px;
+  border: 0px;
+  color: gray;
+}
+.arrow-up-container:hover{
+  color: rgb(155, 0, 0);
+}
+.arrow-down-container{
+  box-shadow: 0 0px;
+  border: 0px;
+  color: gray;
+}
+.arrow-down-container:hover{
+  color: rgb(66, 66, 255);
+}
+.score-text{
+  font-size: .75em;
+  font-weight: 1000;
+  font-family: Verdana, Arial, Helvetica, sans-serif;
+  letter-spacing: -1px;
+}
+.footer-menu-button{
+  box-shadow: 0 0px;
+  border: 0px;
+  background-color: white;
+  border-radius: 3px;
+  color: rgb(110, 110, 110);
+  font-size: .75em;
+  font-family: Verdana, Arial, Helvetica, sans-serif;
+  font-weight: bold;
+}
+.footer-menu-button:hover{
+  background-color: rgb(240, 239, 239);
+}
+.footer-drop-menu-item{
+  width: 100px;
+  color: gray;
+  border: 1px solid rgb(110, 110, 110);
+  z-index: 10;
+  text-align: left;
+  position: relative;
+  top: 0px;
+}
+.footer-drop-menu-item:hover{
+  background-color: rgba(219, 241, 255, 0.877);
+  color: black;
 }
