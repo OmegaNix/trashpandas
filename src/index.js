@@ -1,5 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import Modal from "react-modal";
 import axios from "axios";
 import "./index.css";
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -10,7 +11,16 @@ import SidebarPanda from './sidebarpanda.jpg';
 import upcarot from './upcarot.png';
 import downcarot from './downcarot.png';
 
-
+const customStyles = {
+  content : {
+    top: '25%',
+    left: '50%',
+    right: 'auto',
+    bottom: 'auto',
+    marginRight: '-50%',
+    transform: 'translate(-50%, -50%)'
+  }
+};
 const removeNulls_Duplicates = (arr)=>{
   var cleanArray = arr.filter((el)=> {
       return el != null;
@@ -19,19 +29,36 @@ const removeNulls_Duplicates = (arr)=>{
   cleanArray = [...cleanSet]
   return cleanArray;
 }
-
 const doesPropertyExist = (prop)=>{
   if(prop == null){
     return false;
   }
   return true;
 }
-
 class Reddit extends React.Component{
-  state = {
-    posts: [],
-    flair_tags: [],
-  };
+  constructor(props) {
+    super(props);
+ 
+    this.state = {
+      posts: [],
+      flair_tags: [],
+      modalIsOpen: false,
+    };
+ 
+    this.openModal = this.openModal.bind(this);
+    this.afterOpenModal = this.afterOpenModal.bind(this);
+    this.closeModal = this.closeModal.bind(this);
+  }
+  openModal() {
+    this.setState({modalIsOpen: true});
+  }
+  afterOpenModal() {
+    // references are now sync'd and can be accessed.
+    this.subtitle.style.color = '#f00';
+  }
+  closeModal() {
+    this.setState({modalIsOpen: false});
+  }
   componentDidMount() {
     axios.get(`https://www.reddit.com/r/trashpandas.json?raw_json=1`).then(res => {
       const posts = res.data.data.children.map(obj => obj.data);
@@ -74,8 +101,8 @@ class Reddit extends React.Component{
                   <div className="lightweight-text text-secondary">Posted by u/{post.author} <div className="bg-flairtext text-dark d-inline">{post.author_flair_text} </div><TimeAgo datetime={post.created * 1000}/></div>
                   {doesPropertyExist(post.link_flair_text) ? <div className="badge badge-pill p-2 badge-light d-inline p-0 m-0">{post.link_flair_text}</div> : null}
                   <h5 className="pl-0 pt-3 pb-3 d-inline">{post.title}</h5>
-                  <PostBody content={post}/>
-                  <PostFooter content={post}/>
+                  <PostBody content={post} />
+                  <PostFooter content={post} openModal={this.openModal} closeModal={this.closeModal}/>
                   </div>   
                 </div>
               </div>;})}
@@ -183,6 +210,11 @@ class Reddit extends React.Component{
           </div>
           <div className="col-xl-2 p-0 m-0" id="right-margin"></div>
         </div>
+          <div className="container-fluid">
+            <Modal isOpen={this.state.modalIsOpen} onAfterOpen={this.afterOpenModal} style={customStyles} onRequestClose={this.closeModal}>
+                <h4 className="m-2" ref={subtitle => this.subtitle = subtitle}>This feature has not been implimented...</h4>
+            </Modal>
+          </div>
       </div>
     );
   }
@@ -212,7 +244,7 @@ class PostFooter extends React.Component{
     this.moreClick = this.moreClick.bind(this);
   }
   commentClick(){
-    {/*THIS FEATURE NOT SUPPORTED MODAL BOX*/}
+    this.props.openModal();
   }
   moreClick(){
     this.setState(state => ({
@@ -230,7 +262,7 @@ class PostFooter extends React.Component{
   
   render(){
     return <div className="container-fluid row p-0 m-0">
-      <button className="footer-menu-button m-1 ml-0 pl-0 shadow-none"><i className="fas fa-comment-alt mr-1"></i>{this.state.content.num_comments} Comments</button>
+      <button className="footer-menu-button m-1 ml-0 pl-0 shadow-none" onClick={this.commentClick}><i className="fas fa-comment-alt mr-1"></i>{this.state.content.num_comments} Comments</button>
       <div className="m-0 p-0 d-inline">
         <button className="footer-menu-button m-1" onClick={this.shareClick}><i className="fas fa-share mr-1"></i>Share</button>
         <button className={this.state.shareMenuIsVisible ? "footer-drop-menu-item d-block ml-1 mt-n1 border-bottom-0" : "d-none"}><i className="fas fa-link mr-2"></i>Copy Text</button>
@@ -245,7 +277,6 @@ class PostFooter extends React.Component{
     </div>
   }
 }
-
 class FlairMenu extends React.Component{
   constructor(props){
     super(props);
@@ -332,5 +363,4 @@ class CollapsableMenuItemSimple extends React.Component{
   </li>
   }
 }
-
 ReactDOM.render(<Reddit />, document.getElementById("app")); 
