@@ -11,9 +11,10 @@ import SidebarPanda from './sidebarpanda.jpg';
 import upcarot from './upcarot.png';
 import downcarot from './downcarot.png';
 
-const customStyles = {
+Modal.setAppElement("#app")
+const customModalStyles = {
   content : {
-    top: '25%',
+    top: '50%',
     left: '50%',
     right: 'auto',
     bottom: 'auto',
@@ -28,6 +29,33 @@ const removeNulls_Duplicates = (arr)=>{
   const cleanSet = new Set(cleanArray)
   cleanArray = [...cleanSet]
   return cleanArray;
+}
+const roundToThousands = (count)=>{
+  var roundedCount = (count - count%100);
+  roundedCount = roundedCount.toString();
+  var solution;
+  if(roundedCount.length < 4){
+    return count;
+  }else if(roundedCount.length === 4){
+    if(roundedCount.charAt(1) === 0){
+      solution = roundedCount.charAt(0) + "k";
+    } else {
+      solution = roundedCount.charAt(0) + "." + roundedCount.charAt(1) + "k";
+    }
+    return solution;
+  }else if(roundedCount.length === 5){
+    if(roundedCount.charAt(2) === 0){
+      solution = roundedCount.charAt(0) + roundedCount.charAt(1) + "k";
+    } else {
+      solution = roundedCount.charAt(0) + roundedCount.charAt(1) + "." + roundedCount.charAt(2) + "k";
+    }
+    return solution;
+  }else if(roundedCount.length === 6){
+    solution = roundedCount.charAt(0) + roundedCount.charAt(1) + roundedCount.charAt(2) + "k";
+    return solution;
+  }else{
+    return "1M+"
+  }
 }
 const doesPropertyExist = (prop)=>{
   if(prop == null){
@@ -44,7 +72,6 @@ class Reddit extends React.Component{
       flair_tags: [],
       modalIsOpen: false,
     };
- 
     this.openModal = this.openModal.bind(this);
     this.afterOpenModal = this.afterOpenModal.bind(this);
     this.closeModal = this.closeModal.bind(this);
@@ -53,8 +80,7 @@ class Reddit extends React.Component{
     this.setState({modalIsOpen: true});
   }
   afterOpenModal() {
-    // references are now sync'd and can be accessed.
-    this.subtitle.style.color = '#f00';
+    this.subtitle.style.color = '#FF4301';
   }
   closeModal() {
     this.setState({modalIsOpen: false});
@@ -72,36 +98,35 @@ class Reddit extends React.Component{
         <header>
           <div className="row bg-black p-5"></div>
           <div className="row">
-            <div className="col-xl-2 col-lg-0 p-0 m-0" id="header-left-margin"></div>
+            <div className="col-xl-2 p-0 m-0" id="header-left-margin"></div>
             <div className="col-xl-10 col-lg-12 d-inline" id="header-content ">
               <div className="d-inline mr-0 pr-0" id="header-left-image">
                 <img className="header-image rounded-circle float-left" src={logo} alt="Raccoon Icon"/>
               </div>
               <h1 className="pb-0 mb-0 d-inline">Trashpandas</h1>
-              <button className="reddit-button ml-sm-5 p-2 d-inline" style={{width: "90px"}}>JOIN</button>
+              <button className="reddit-button ml-sm-5 p-2 d-inline" onClick={this.openModal} style={{width: "90px"}}>JOIN</button>
               <small className="pt-0 mt-0 d-block">A small portfoio app by Nate Krieger</small>
-              
             </div>
           </div>
         </header>
 
         <div className="row bg-background" id="main-container">
           <div className="col-xl-2 p-0 m-0" id="left-margin"></div>
-          <div className="col-xl-5" id="post-content-container">
+          <div className="col-xl-5">
             {<ul className="m-0 p-0">
               {this.state.posts.map(post => {
-              return <div className="m-0 p-0" key={post.id}>
-                <div className="row m-0 mt-3 mb-3 bg-white rounded">
-                  <div className="col-xl-1 d-inline bg-light text-center m-0 p-0 rounded-left">
-                    <button className="rounded arrow-up-container bg-light mt-2 mb-0"><i className="fas fa-arrow-up"></i></button>
-                    <div className="m-0 p-0 score-text">{post.score}</div>
-                    <button className="rounded arrow-down-container bg-light mb-2 mt-0"><i className="fas fa-arrow-down"></i></button>
-                  </div>
-                  <div className="col-xl-11 d-inline" id="post-main">
-                  <div className="lightweight-text text-secondary">Posted by u/{post.author} <div className="bg-flairtext text-dark d-inline">{post.author_flair_text} </div><TimeAgo datetime={post.created * 1000}/></div>
+              return <div className="m-1 p-0  post-container bg-light rounded" key={post.id}>
+                  <div className="row m-0 mt-3 mb-3 bg-white rounded">
+                    <div className="col-lg-1 d-inline bg-light text-center m-0 p-0 rounded-left score-container">
+                      <button className="rounded arrow-up-container m-0" onClick={this.openModal}><i className="fas fa-arrow-up"></i></button>
+                      <div className="m-0 p-0 score-text">{roundToThousands(post.score)}</div>
+                      <button className="rounded arrow-down-container mb-0" onClick={this.openModal}><i className="fas fa-arrow-down"></i></button>
+                    </div>
+                  <div className="col-lg-11 d-inline" id="post-main">
+                  <div className="lightweight-text text-secondary post-header-text">Posted by u/{post.author} <div className="bg-flairtext text-dark d-inline">{post.author_flair_text} </div><TimeAgo datetime={post.created * 1000}/></div>
                   {doesPropertyExist(post.link_flair_text) ? <div className="badge badge-pill p-2 badge-light d-inline p-0 m-0">{post.link_flair_text}</div> : null}
                   <h5 className="pl-0 pt-3 pb-3 d-inline">{post.title}</h5>
-                  <PostBody content={post} />
+                  <PostBody content={post}/>
                   <PostFooter content={post} openModal={this.openModal} closeModal={this.closeModal}/>
                   </div>   
                 </div>
@@ -160,20 +185,23 @@ class Reddit extends React.Component{
                 <img src={SidebarPanda} className="img-fluid rounded vertical-flip" alt="Upsidown Smiling Raccoon"/>
             </div>
             <div className="row rounded bg-white m-0 mt-3 mb-3" id="static-mods-card">
-              <strong className="row col-xl-12 m-0 bg-secondary p-3 text-white rounded-top">Moderators</strong>
+              <div className="row col-xl-12 m-0 bg-secondary d-inline p-3 text-white rounded-top">
+                <strong >Moderators</strong>
+                <div className="float-right force-pointer" onClick={this.openModal}><i className="fas fa-envelope"></i></div>
+              </div>
               <div className="row m-0 p-3 d-block">
-                <a href="https://www.reddit.com/user/GoreFox/" className="d-inline modlist-link font-weight-bold m-2">u/GoreFox</a>
-                <label className="bg-flairtext m-1">Trashpanda Enthusiast</label>
-                <a href="https://www.reddit.com/user/JanetYellensFuckboy/" className="d-inline modlist-link font-weight-bold m-2">u/JanetYellensFuckboy</a>
-                <label className="bg-flairtext d-inline m-1">takes credit for Guardia...</label>
-                <a href="https://www.reddit.com/user/BotBust/" className="d-block modlist-link font-weight-bold m-2">u/BotBust</a>
-                <a href="https://www.reddit.com/user/tsmaster777/" className="d-block modlist-link font-weight-bold m-2">u/tsmaster777</a>
-                <a href="https://www.reddit.com/user/PapaTrashusPandusI/" className="d-inline modlist-link font-weight-bold m-2">u/PapaTrashusPandusI</a>
-                <label className="bg-flairtext m-1">Lucipurrrr we are here</label>
-                <a href="https://www.reddit.com/user/urbanspacecowboy/" className="d-block modlist-link font-weight-bold m-2">u/urbanspacecowboy</a>
-                <a href="https://www.reddit.com/user/BotTerminator/" className="d-block modlist-link font-weight-bold m-2">u/BotTerminator</a>
-                <a href="https://www.reddit.com/user/BotDefense/" className="d-block modlist-link font-weight-bold m-2">u/BotDefense</a>
-                <a href="https://www.reddit.com/r/trashpandas/about/moderators/" className="d-block text-right modlist-link font-weight-bold m-3">VIEW ALL MODERATORS</a>
+                <a href="https://www.reddit.com/user/GoreFox/" className="d-inline modlist-link m-2">u/GoreFox</a>
+                <label className="bg-flairtext modlist-flairtext">Trashpanda Enthusiast</label>
+                <a href="https://www.reddit.com/user/JanetYellensFuckboy/" className="d-inline modlist-link m-2">u/JanetYellensFuckboy</a>
+                <label className="bg-flairtext modlist-flairtext d-inline">takes credit for Guardia...</label>
+                <a href="https://www.reddit.com/user/BotBust/" className="d-block modlist-link m-2">u/BotBust</a>
+                <a href="https://www.reddit.com/user/tsmaster777/" className="d-block modlist-link m-2">u/tsmaster777</a>
+                <a href="https://www.reddit.com/user/PapaTrashusPandusI/" className="d-inline modlist-link m-2">u/PapaTrashusPandusI</a>
+                <label className="bg-flairtext modlist-flairtext">Lucipurrrr we are here</label>
+                <a href="https://www.reddit.com/user/urbanspacecowboy/" className="d-block modlist-link  m-2">u/urbanspacecowboy</a>
+                <a href="https://www.reddit.com/user/BotTerminator/" className="d-block modlist-link m-2">u/BotTerminator</a>
+                <a href="https://www.reddit.com/user/BotDefense/" className="d-block modlist-link m-2">u/BotDefense</a>
+                <a href="https://www.reddit.com/r/trashpandas/about/moderators/" className="d-block text-right modlist-link m-3">VIEW ALL MODERATORS</a>
               </div>
                 
             </div>
@@ -206,13 +234,25 @@ class Reddit extends React.Component{
                 <p>Reddit Inc © 2019. All rights reserved</p>
                 </div>
             </div>
-            <div class="row"><button class="reddit-button mx-auto p-2 text-nowrap" style={{width: "130px"}}>BACK TO TOP</button></div>
+            <div className="row"><a className="reddit-button mx-auto p-3 text-nowrap text-center " href="#top" style={{width: "130px"}}>BACK TO TOP</a></div>
           </div>
           <div className="col-xl-2 p-0 m-0" id="right-margin"></div>
         </div>
           <div className="container-fluid">
-            <Modal isOpen={this.state.modalIsOpen} onAfterOpen={this.afterOpenModal} style={customStyles} onRequestClose={this.closeModal}>
-                <h4 className="m-2" ref={subtitle => this.subtitle = subtitle}>This feature has not been implimented...</h4>
+            <Modal isOpen={this.state.modalIsOpen} onAfterOpen={this.afterOpenModal} style={customModalStyles} onRequestClose={this.closeModal}>
+                <h4 className="mt-2 mb-0 text-center" ref={subtitle => this.subtitle = subtitle}>This feature has not been implimented...</h4>
+                <h6 className="text-center m-0 p-0">Thank you for taking the time to check out my project.</h6>
+                <hr/>
+                <div className="container row">
+                  <p>My name is Nate Krieger and I am a web developer currently looking for work.  I am passionate about all things Javascript (and raccoons!)  Before I built this page, my portfolio was full of fun NodeJS bot projects, but it lacked anything which demonstrated my ability to work on the front-end, where javascript is king.  I build this clone of /r/trashpandas with the goal of recreating the original page as accurately as possible using React and Bootstrap 4.</p>
+                  <p>There are some features of this page which would typically prompt you to sign into your Reddit account.  While I am capable of building an OAuth portal which would allow you to use my mirror site with your Reddit account, it was outside of what I wanted to accomplish for this piece, which was to showcase my ability to meticulously reproduce the design and UI features of Reddit using custom React components and the Bootstrap 4 stylesheet. </p>
+                  <p>I didn’t use any of the behavioral features of Bootstrap (which require jQuery and are unpredictable in JSX) and the only prefabricated component I am using is this modal box.  It is also worth noting that I used an icon font instead of inline SVG for the iconography on the site, so my icons differ slightly from the original.</p>
+                  <div className="text-center p-0 m-0 d-inline row align-center mx-auto">
+                    <a href="https://www.github.com/omeganix" className="p-1 modal-footer-icon"><i className="fab fa-github-square"></i></a>
+                    <a href="mailto:n.t.krieger@gmail.com" className="p-1 modal-footer-icon"><i className="fas fa-envelope-square"></i></a>
+                    <a href="https://www.linkedin.com/in/ntkrieger" className="p-1 modal-footer-icon"><i className="fab fa-linkedin"></i></a>
+                  </div>
+                </div>
             </Modal>
           </div>
       </div>
@@ -226,10 +266,60 @@ class PostBody extends React.Component{
   }
   render(){
     return <div className="container-fluid">
-      <img src={this.state.content.thumbnail} alt="thumbnail"/>
+      <div>{this.props.content.is_video? <VideoPost media={this.props.content.media} url={this.props.content.url}/>:null}</div>
+      <div>{this.props.content.post_hint === "image" ? <ImagePost source={this.props.content.preview.images.source}/>:null}</div>
     </div>
   }
 }
+class VideoPost extends React.Component{
+  constructor(props){
+    super(props);
+    this.state = {
+      media : this.props.media,
+      url : this.props.url,
+    }
+  }
+  render(){
+    return <div className="container-fluid">
+    </div>
+  }
+}
+class ImagePost extends React.Component{
+  constructor(props){
+    super(props);
+    this.state = {
+      source : this.props.source
+    }
+  }
+  render(){
+    return <div className="container-fluid">
+      <img src={this.props.source} alt=""></img>
+    </div>
+  }
+}
+
+class TextPost extends React.Component{
+  constructor(props){
+    super(props);
+    this.state = {content : this.props.content}
+  }
+  render(){
+    return <div className="container-fluid">
+      {this.props.content.selftext}
+    </div>
+  }
+}
+class CrossPost extends React.Component{
+  constructor(props){
+    super(props);
+    this.state = {content : this.props.content}
+  }
+  render(){
+    return <div className="container-fluid">
+    </div>
+  }
+}
+
 class PostFooter extends React.Component{
   constructor(props){
     super(props);
@@ -238,12 +328,11 @@ class PostFooter extends React.Component{
       shareMenuIsVisible: false,
       moreMenuIsVisible: false,
     };
-    this.commentClick = this.commentClick.bind(this);
+    this.modalClick = this.modalClick.bind(this);
     this.shareClick = this.shareClick.bind(this);
-    this.saveClick = this.saveClick.bind(this);
     this.moreClick = this.moreClick.bind(this);
   }
-  commentClick(){
+  modalClick(){
     this.props.openModal();
   }
   moreClick(){
@@ -256,23 +345,20 @@ class PostFooter extends React.Component{
       shareMenuIsVisible: !state.shareMenuIsVisible,
     }));
   }
-  saveClick(){
-    {/*THIS FEATURE NOT SUPPORTED MODAL BOX*/}
-  }
   
   render(){
     return <div className="container-fluid row p-0 m-0">
-      <button className="footer-menu-button m-1 ml-0 pl-0 shadow-none" onClick={this.commentClick}><i className="fas fa-comment-alt mr-1"></i>{this.state.content.num_comments} Comments</button>
+      <button className="footer-menu-button m-1 ml-0 pl-0 shadow-none" onClick={this.modalClick}><i className="fas fa-comment-alt mr-1"></i>{this.state.content.num_comments} Comments</button>
       <div className="m-0 p-0 d-inline">
         <button className="footer-menu-button m-1" onClick={this.shareClick}><i className="fas fa-share mr-1"></i>Share</button>
         <button className={this.state.shareMenuIsVisible ? "footer-drop-menu-item d-block ml-1 mt-n1 border-bottom-0" : "d-none"}><i className="fas fa-link mr-2"></i>Copy Text</button>
         <button className={this.state.shareMenuIsVisible ? "footer-drop-menu-item d-block ml-1" : "d-none"}><i className="fas fa-code ml-n1 mr-2"></i>Embed</button>
       </div>
-      <button className="footer-menu-button m-1"><i className="fas fa-folder-plus mr-1"></i>Save</button>
+      <button className="footer-menu-button m-1" onClick={this.modalClick}><i className="fas fa-folder-plus mr-1" ></i>Save</button>
       <div className="m-0 p-0 d-inline">
         <button className="footer-menu-button m-1" onClick={this.moreClick}><i className="fas fa-ellipsis-h"></i></button>
-        <button className={this.state.moreMenuIsVisible ? "footer-drop-menu-item d-block ml-1 border-bottom-0 mt-n1" : "d-none"}><i class="fas fa-flag mr-2"></i>Hide</button>
-        <button className={this.state.moreMenuIsVisible ? "footer-drop-menu-item d-block ml-1 border-bottom-2" : "d-none"}><i class="fas fa-ban mr-2"></i>Report</button>
+        <button className={this.state.moreMenuIsVisible ? "footer-drop-menu-item d-block ml-1 border-bottom-0 mt-n1" : "d-none"}><i className="fas fa-flag mr-2"></i>Hide</button>
+        <button className={this.state.moreMenuIsVisible ? "footer-drop-menu-item d-block ml-1 border-bottom-2" : "d-none"}><i className="fas fa-ban mr-2"></i>Report</button>
       </div>
     </div>
   }
