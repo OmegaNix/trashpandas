@@ -122,7 +122,7 @@ class Reddit extends React.Component{
                       <div className="m-0 p-0 score-text">{roundToThousands(post.score)}</div>
                       <button className="rounded arrow-down-container mb-0" onClick={this.openModal}><i className="fas fa-arrow-down"></i></button>
                     </div>
-                  <div className="col-lg-11 d-inline" id="post-main">
+                  <div className="col-lg-11 d-inline p-0" id="post-main">
                   <div className="lightweight-text text-secondary post-header-text">Posted by u/{post.author} <div className="bg-flairtext text-dark d-inline">{post.author_flair_text} </div><TimeAgo datetime={post.created * 1000}/></div>
                   {doesPropertyExist(post.link_flair_text) ? <div className="badge badge-pill p-2 badge-light d-inline p-0 m-0">{post.link_flair_text}</div> : null}
                   <h5 className="pl-0 pt-3 pb-3 d-inline">{post.title}</h5>
@@ -203,7 +203,6 @@ class Reddit extends React.Component{
                 <a href="https://www.reddit.com/user/BotDefense/" className="d-block modlist-link m-2">u/BotDefense</a>
                 <a href="https://www.reddit.com/r/trashpandas/about/moderators/" className="d-block text-right modlist-link m-3">VIEW ALL MODERATORS</a>
               </div>
-                
             </div>
             <div className="row rounded bg-white m-0 mt-3" id="static-sitenav-card">
                 <div className="col-xl-5 p-3">
@@ -262,69 +261,76 @@ class Reddit extends React.Component{
 class PostBody extends React.Component{
   constructor(props){
     super(props);
-    this.state = {content : this.props.content}
+    this.state = {}
   }
   render(){
-    return <div className="container-fluid">
-      <div>{this.props.content.is_video? <VideoPost media={this.props.content.media} url={this.props.content.url}/>:null}</div>
-      <div>{this.props.content.post_hint === "image" ? <ImagePost source={this.props.content.preview.images.source}/>:null}</div>
-    </div>
+    if(this.props.content.crosspost_parent_list != null){
+      return <div className="container-fluid m-0 p-0"><CrossPost content={this.props.content}/></div>
+    }else if(this.props.content.post_hint === "image"){
+      return <div className="container-fluid m-0 p-0"><ImagePost images={this.props.content.preview.images[0]}/></div>
+    }else if(this.props.content.is_video === true){
+      return <div className="container-fluid m-0 p-0"><VideoPost media={this.props.content.media} url={this.props.content.url}/></div>
+    }else if(this.props.content.link_flair_text === "question"){
+      return <div className="container-fluid m-0 p-0"><QuestionPost text={this.props.content.selftext}/></div>
+    }else{
+      return null
+    }
   }
 }
 class VideoPost extends React.Component{
   constructor(props){
     super(props);
-    this.state = {
-      media : this.props.media,
-      url : this.props.url,
-    }
+    this.state = {}
   }
   render(){
-    return <div className="container-fluid">
+    return <div className="container fluid">
+      <video className="embed-responsive"src={this.props.media.reddit_video.scrubber_media_url}></video>
     </div>
   }
 }
 class ImagePost extends React.Component{
   constructor(props){
     super(props);
-    this.state = {
-      source : this.props.source
-    }
+    this.state = {}
   }
   render(){
-    return <div className="container-fluid">
-      <img src={this.props.source} alt=""></img>
+    return <div className="container-fluid p-0">
+      <img src={this.props.images.source.url} alt="" className="img-fluid mx-auto"></img>
     </div>
   }
 }
-
-class TextPost extends React.Component{
+class QuestionPost extends React.Component{
   constructor(props){
     super(props);
-    this.state = {content : this.props.content}
+    this.state = {}
   }
   render(){
-    return <div className="container-fluid">
-      {this.props.content.selftext}
+    return <div className="container-fluid pl-0 pt-2">
+      <p className="post-text">{this.props.text}</p>
     </div>
   }
 }
 class CrossPost extends React.Component{
   constructor(props){
     super(props);
-    this.state = {content : this.props.content}
+    this.state = {}
   }
   render(){
-    return <div className="container-fluid">
-    </div>
+    if(this.props.content.post_hint === "image"){
+      return <div className="container-fluid m-0 p-0"><ImagePost images={this.props.content.preview.images[0]}/></div>
+    }else if(this.props.content.is_video === true){
+      return <div className="container-fluid m-0 p-0"><VideoPost media={this.props.content.media} url={this.props.content.url}/></div>
+    }else if(this.props.content.link_flair_text === "question"){
+      return <div className="container-fluid m-0 p-0"><QuestionPost text={this.props.content.selftext}/></div>
+    }else{
+      return null
+    }
   }
 }
-
 class PostFooter extends React.Component{
   constructor(props){
     super(props);
     this.state = {
-      content : this.props.content,
       shareMenuIsVisible: false,
       moreMenuIsVisible: false,
     };
@@ -344,11 +350,10 @@ class PostFooter extends React.Component{
     this.setState(state => ({
       shareMenuIsVisible: !state.shareMenuIsVisible,
     }));
-  }
-  
+  } 
   render(){
     return <div className="container-fluid row p-0 m-0">
-      <button className="footer-menu-button m-1 ml-0 pl-0 shadow-none" onClick={this.modalClick}><i className="fas fa-comment-alt mr-1"></i>{this.state.content.num_comments} Comments</button>
+      <button className="footer-menu-button m-1 ml-0 pl-0 shadow-none" onClick={this.modalClick}><i className="fas fa-comment-alt mr-1"></i>{this.props.content.num_comments} Comments</button>
       <div className="m-0 p-0 d-inline">
         <button className="footer-menu-button m-1" onClick={this.shareClick}><i className="fas fa-share mr-1"></i>Share</button>
         <button className={this.state.shareMenuIsVisible ? "footer-drop-menu-item d-block ml-1 mt-n1 border-bottom-0" : "d-none"}><i className="fas fa-link mr-2"></i>Copy Text</button>
@@ -368,7 +373,6 @@ class FlairMenu extends React.Component{
     super(props);
     this.state = { filterBy : null}
   }
-
   render(){
     return(<div>
       {<ul className="mb-4 p-0">

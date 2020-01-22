@@ -93,6 +93,9 @@ html, body {
   font-family: Verdana, Arial, Helvetica, sans-serif;
   letter-spacing: -1px;
 }
+.post-text{
+  line-height: 100%;
+}
 .post-header-text{
   font-size: .75em;
 }
