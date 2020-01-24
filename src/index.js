@@ -18,6 +18,7 @@ const customModalStyles = {
     left: '50%',
     right: 'auto',
     bottom: 'auto',
+    width: '60%',
     marginRight: '-50%',
     transform: 'translate(-50%, -50%)'
   }
@@ -197,7 +198,7 @@ class Reddit extends React.Component{
                 <a href="https://www.reddit.com/user/BotBust/" className="d-block modlist-link m-2">u/BotBust</a>
                 <a href="https://www.reddit.com/user/tsmaster777/" className="d-block modlist-link m-2">u/tsmaster777</a>
                 <a href="https://www.reddit.com/user/PapaTrashusPandusI/" className="d-inline modlist-link m-2">u/PapaTrashusPandusI</a>
-                <label className="bg-flairtext modlist-flairtext">Lucipurrrr we are here</label>
+                <label className="bg-flairtext modlist-flairtext mb-0">Lucipurrrr we are here</label>
                 <a href="https://www.reddit.com/user/urbanspacecowboy/" className="d-block modlist-link  m-2">u/urbanspacecowboy</a>
                 <a href="https://www.reddit.com/user/BotTerminator/" className="d-block modlist-link m-2">u/BotTerminator</a>
                 <a href="https://www.reddit.com/user/BotDefense/" className="d-block modlist-link m-2">u/BotDefense</a>
@@ -332,6 +333,8 @@ class PostFooter extends React.Component{
     super(props);
     this.state = {
       shareMenuIsVisible: false,
+      shareMenuLocation: {},
+      shareMenuDropTopLocation: {},
       moreMenuIsVisible: false,
     };
     this.modalClick = this.modalClick.bind(this);
@@ -339,31 +342,43 @@ class PostFooter extends React.Component{
     this.moreClick = this.moreClick.bind(this);
   }
   modalClick(){
+    this.setState(state => ({
+      moreMenuIsVisible: false,
+      shareMenuIsVisible: false,
+    }));
     this.props.openModal();
   }
   moreClick(){
     this.setState(state => ({
+      moreMenuLocation: document.getElementById('more-button').getBoundingClientRect(),
       moreMenuIsVisible: !state.moreMenuIsVisible,
+      shareMenuIsVisible: false,
     }));
+    document.getElementById('more-drop-1').style.top = this.moreMenuLocation.bottom;
+    document.getElementById('more-drop-1').style.left = this.moreMenuLocation.left;
   }
   shareClick(){
     this.setState(state => ({
+      shareMenuLocation: document.getElementById('share-button').getBoundingClientRect(),
       shareMenuIsVisible: !state.shareMenuIsVisible,
+      moreMenuIsVisible: false,
     }));
+    document.getElementById('share-drop-1').style.top = this.shareMenuLocation.bottom;
+    document.getElementById('share-drop-1').style.left = this.shareMenuLocation.left;
   } 
   render(){
     return <div className="container-fluid row p-0 m-0">
       <button className="footer-menu-button m-1 ml-0 pl-0 shadow-none" onClick={this.modalClick}><i className="fas fa-comment-alt mr-1"></i>{this.props.content.num_comments} Comments</button>
       <div className="m-0 p-0 d-inline">
-        <button className="footer-menu-button m-1" onClick={this.shareClick}><i className="fas fa-share mr-1"></i>Share</button>
-        <button className={this.state.shareMenuIsVisible ? "footer-drop-menu-item d-block ml-1 mt-n1 border-bottom-0" : "d-none"}><i className="fas fa-link mr-2"></i>Copy Text</button>
-        <button className={this.state.shareMenuIsVisible ? "footer-drop-menu-item d-block ml-1" : "d-none"}><i className="fas fa-code ml-n1 mr-2"></i>Embed</button>
+        <button className="footer-menu-button m-1" onClick={this.shareClick} id="share-button"><i className="fas fa-share mr-1"></i>Share</button>
+        <button id="share-drop-1" onClick={this.modalClick} className={this.state.shareMenuIsVisible ? "footer-drop-menu-item d-block ml-1 mt-n1" : "d-none"}><i className="fas fa-link mr-2"></i>Copy Text</button>
+        <button id="share-drop-2" onClick={this.modalClick} className={this.state.shareMenuIsVisible ? "footer-drop-menu-item border-bottom-2 d-block ml-1 mt-4" : "d-none"}><i className="fas fa-code ml-n1 mr-2"></i>Embed</button>
       </div>
       <button className="footer-menu-button m-1" onClick={this.modalClick}><i className="fas fa-folder-plus mr-1" ></i>Save</button>
       <div className="m-0 p-0 d-inline">
-        <button className="footer-menu-button m-1" onClick={this.moreClick}><i className="fas fa-ellipsis-h"></i></button>
-        <button className={this.state.moreMenuIsVisible ? "footer-drop-menu-item d-block ml-1 border-bottom-0 mt-n1" : "d-none"}><i className="fas fa-flag mr-2"></i>Hide</button>
-        <button className={this.state.moreMenuIsVisible ? "footer-drop-menu-item d-block ml-1 border-bottom-2" : "d-none"}><i className="fas fa-ban mr-2"></i>Report</button>
+        <button className="footer-menu-button m-1" onClick={this.moreClick} id="more-button"><i className="fas fa-ellipsis-h"></i></button>
+        <button id="more-drop-1" onClick={this.modalClick} className={this.state.moreMenuIsVisible ? "footer-drop-menu-item d-block ml-1 mt-n1" : "d-none"}><i className="fas fa-flag mr-2"></i>Hide</button>
+        <button id="more-drop-2" onClick={this.modalClick} className={this.state.moreMenuIsVisible ? "footer-drop-menu-item d-block ml-1 border-bottom-2 mt-4" : "d-none"}><i className="fas fa-ban mr-2"></i>Report</button>
       </div>
     </div>
   }
