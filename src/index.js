@@ -156,7 +156,7 @@ class Reddit extends React.Component{
               <strong className="row col-xl-12 m-0 bg-secondary p-3 text-white rounded-top">Filter by flair</strong>
               <div className="row m-0 p-3 w-100">
               {/*FLAIR TAGS*/}
-                <FlairMenu array={this.state.flair_tags}/>
+                <FlairMenu openModal={this.openModal} array={this.state.flair_tags}/>
               </div>
             </div>
             <div className="row w-100 m-0 p-0 mb-3">
@@ -386,14 +386,19 @@ class PostFooter extends React.Component{
 class FlairMenu extends React.Component{
   constructor(props){
     super(props);
-    this.state = { filterBy : null}
+    this.state = {filterBy : null} //filters not yet implimented
+    this.handleClick = this.handleClick.bind(this);
   }
+  handleClick(){
+    this.props.openModal();
+  }
+
   render(){
     return(<div>
       {<ul className="mb-4 p-0">
         {this.props.array.map(tag => {
-            return <div className="m-0 p-0 d-inline">
-              <div className="badge badge-pill p-2 badge-light d-inline p-0 m-0 font-weight-normal">{tag}</div>
+            return <div className="m-0 p-0 d-inline" key={tag}>
+              <div onClick={this.handleClick}className="badge badge-pill p-2 badge-light d-inline p-0 m-0 font-weight-normal force-pointer">{tag}</div>
             </div>;})}
         </ul>}
     </div>
