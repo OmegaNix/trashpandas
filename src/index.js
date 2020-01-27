@@ -266,7 +266,7 @@ class PostBody extends React.Component{
   }
   render(){
     if(this.props.content.crosspost_parent_list != null){
-      return <div className="container-fluid m-0 p-0"><CrossPost content={this.props.content}/></div>
+      return <div className="container-fluid m-0 p-0"><CrossPost content={this.props.content.crosspost_parent_list[0]}/></div>
     }else if(this.props.content.post_hint === "image"){
       return <div className="container-fluid m-0 p-0"><ImagePost images={this.props.content.preview.images[0]}/></div>
     }else if(this.props.content.is_video === true){
@@ -285,7 +285,7 @@ class VideoPost extends React.Component{
   }
   render(){
     return <div className="container fluid">
-      <video className="embed-responsive"src={this.props.media.reddit_video.scrubber_media_url}></video>
+      <video controls autoPlay="" type="video/mp4" className="embed-responsive" src={this.props.media.reddit_video.fallback_url}></video>
     </div>
   }
 }
@@ -398,7 +398,7 @@ class FlairMenu extends React.Component{
       {<ul className="mb-4 p-0">
         {this.props.array.map(tag => {
             return <div className="m-0 p-0 d-inline" key={tag}>
-              <div onClick={this.handleClick}className="badge badge-pill p-2 badge-light d-inline p-0 m-0 font-weight-normal force-pointer">{tag}</div>
+              <div onClick={this.handleClick} className="badge badge-pill p-2 badge-light d-inline p-0 m-0 font-weight-normal force-pointer">{tag}</div>
             </div>;})}
         </ul>}
     </div>
