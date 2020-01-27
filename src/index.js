@@ -124,24 +124,8 @@ class Reddit extends React.Component{
             </ul>}
           </div>
           <div className="col-xl-3 p-0 mt-3 pl-4 m-0" id="static-content-container">
-            <div className="row rounded bg-white m-0 mb-3" id="static-title-card">
-                <strong className="row col-xl-12 m-0 bg-secondary p-3 text-white rounded-top">About Community</strong>
-                <p className="p-3">Welcome to r/trashpandas: Your home for all things trashpanda-related! Here at r/trashpandas, we strive to share the cutest & *most awesomest* content there is! #🦝🦝🦝🦝🦝🦝🦝🦝🦝🦝🦝</p>
-                <div className="row m-0 p-0 w-100">
-                  <div className="col-xl-5 m-0">
-                    <h5 className="mb-0">229k</h5><small className="mt-0">Members</small>
-                  </div>
-                  <div className="col-xl-7 m-0">
-                    <h5 className="mb-0">130</h5><small className="mt-0">Online</small>
-                  </div>
-                </div>
-                <hr className="row mx-auto" width="90%"></hr>
-                <div className="row w-100 m-0 p-0 mb-3">
-                  <img className="col-xl-2 img-fluid m-0 font-weight-light" alt="Birthday Cake" src={BirthdayCake}/>
-                <label className="col-xl-10 p-0 pt-2 h5">Created July 11, 2015</label>
-                </div>
-            </div>       
-            <div className="row rounded bg-white m-0 mt-3 mb-3" id="static-filter-card">
+            <AboutCommunityCard/>
+            <div className="row rounded bg-white m-0 mt-3 mb-3">
               <strong className="row col-xl-12 m-0 bg-secondary p-3 text-white rounded-top">Filter by flair</strong>
               <div className="row m-0 p-3 w-100">
                 <FlairMenu openModal={this.openModal} array={this.state.flair_tags}/>
@@ -150,79 +134,13 @@ class Reddit extends React.Component{
             <div className="row w-100 m-0 p-0 mb-3">
                 <img src={SidebarPanda} className="img-fluid rounded" alt="Smiling Raccoon"/>
             </div>
-            <div className="row rounded bg-white m-0 mt-3 mb-3" id="static-rules-card">
-              <strong className="row col-xl-12 m-0 bg-secondary p-3 text-white rounded-top">r/trashpandas Rules</strong>
-              <ol className="m-1 pl-4 pr-4 pt-2 pb-2 container-fluid">
-                <CollapsableMenuItemOne/>
-                <hr className="row m-2 mx-auto divider"></hr>
-                <li className="plaintext">All posts must pertain to trashpandas</li>
-                <hr className="row mx-auto m-2"></hr>
-                <CollapsableMenuItemThree/>
-                <hr className="row mx-auto m-2"></hr>
-                <CollapsableMenuItemSimple title="No trashpanda marraige proposals" text="No pictures of giving rings to trashpandas. This engagement is off. We've seen this post many times here, and we needn't see it anymore. Just go to Las Vegas."/>
-                <hr className="row mx-auto m-2"></hr>
-                <li className="plaintext">No merchandise</li>
-                <hr className="row mx-auto m-2"></hr>
-                <CollapsableMenuItemSimple title="No profanity" text="This is a wholesome sub for people of all ages. Please keep profanity to a minimum."/>
-                <hr className="row mx-auto m-2"></hr>
-                <CollapsableMenuItemSimple title="Keep it apolitical" linksrc="https://www.reddit.com/r/trashpandas" linktext="r/trashpandas " text="supersede politics. Please don't bring politics into this subreddit."/>
-                <hr className="row mx-auto m-2"></hr>
-                <CollapsableMenuItemSimple title="No Bamboozlement" text="Any users caught bamboozling us will be banned. Please don't bamboozle."/>
-              </ol>
-            </div>
+            <RulesCard/>
             <div className="row w-100 m-0 p-0 mb-3">
                 <img src={SidebarPanda} className="img-fluid rounded vertical-flip" alt="Upsidown Smiling Raccoon"/>
             </div>
-            <div className="row rounded bg-white m-0 mt-3 mb-3" id="static-mods-card">
-              <div className="row col-xl-12 m-0 bg-secondary d-inline p-3 text-white rounded-top">
-                <strong >Moderators</strong>
-                <div className="float-right force-pointer" onClick={this.openModal}><i className="fas fa-envelope"></i></div>
-              </div>
-              <div className="row m-0 p-3 d-block">
-                <a href="https://www.reddit.com/user/GoreFox/" className="d-inline modlist-link m-2">u/GoreFox</a>
-                <label className="bg-flairtext modlist-flairtext">Trashpanda Enthusiast</label>
-                <a href="https://www.reddit.com/user/JanetYellensFuckboy/" className="d-inline modlist-link m-2">u/JanetYellensFuckboy</a>
-                <label className="bg-flairtext modlist-flairtext d-inline">takes credit for Guardia...</label>
-                <a href="https://www.reddit.com/user/BotBust/" className="d-block modlist-link m-2">u/BotBust</a>
-                <a href="https://www.reddit.com/user/tsmaster777/" className="d-block modlist-link m-2">u/tsmaster777</a>
-                <a href="https://www.reddit.com/user/PapaTrashusPandusI/" className="d-inline modlist-link m-2">u/PapaTrashusPandusI</a>
-                <label className="bg-flairtext modlist-flairtext mb-0">Lucipurrrr we are here</label>
-                <a href="https://www.reddit.com/user/urbanspacecowboy/" className="d-block modlist-link  m-2">u/urbanspacecowboy</a>
-                <a href="https://www.reddit.com/user/BotTerminator/" className="d-block modlist-link m-2">u/BotTerminator</a>
-                <a href="https://www.reddit.com/user/BotDefense/" className="d-block modlist-link m-2">u/BotDefense</a>
-                <a href="https://www.reddit.com/r/trashpandas/about/moderators/" className="d-block text-right modlist-link m-3">VIEW ALL MODERATORS</a>
-              </div>
-            </div>
-            <div className="row rounded bg-white m-0 mt-3" id="static-sitenav-card">
-                <div className="col-xl-5 p-3">
-                  <label className="font-weight-bold d-block">Reddit</label>
-                  <a href="https://about.reddit.com/" className="d-block plaintext-link">About</a>
-                  <a href="https://about.reddit.com/careers/" className="d-block plaintext-link">Careers</a>
-                  <a href="https://about.reddit.com/press/" className="d-block plaintext-link">Press</a>
-                  <a href="https://www.redditinc.com/advertising" className="d-block plaintext-link">Advertise</a>
-                  <a href="http://www.redditblog.com/" className="d-block plaintext-link">Blog</a>
-                </div>
-                <div className="col-xl-7 p-3">
-                  <label className="font-weight-bold">Using Reddit</label>
-                  <a href="https://www.reddithelp.com/" className="d-block plaintext-link">Help</a>
-                  <a href="https://www.reddit.com/mobile/download" className="d-bloc plaintext-link">Reddit App</a>
-                  <a href="https://www.reddit.com/coins" className="d-block plaintext-link">Reddit Coins</a>
-                  <a href="https://www.reddit.com/premium" className="d-block plaintext-link">Reddit Premium</a>
-                  <a href="http://redditgifts.com/" className="d-block plaintext-link">Reddit Gifts</a>
-                  <a href="https://www.reddit.com/subreddits/a-1/" className="d-block plaintext-link">Communities</a>
-                  <a href="https://www.reddit.com/posts/a-1/" className="d-block plaintext-link">Top Posts</a>
-                </div>
-                <div className="row m-0 pl-3 mb-3 mt-3 pb-0">
-                  <a href="https://www.redditinc.com/policies/user-agreement" className="plaintext-link mr-2">Terms</a><span>|</span>
-                  <a href="https://www.redditinc.com/policies/content-policy" className="plaintext-link mr-2 ml-2">Content Policy</a><span>|</span>
-                  <a href="https://www.reddit.com/help/privacypolicy" className="plaintext-link mr-2 ml-2">Privacy Policy</a><span>|</span>
-                  <a href="https://www.reddit.com/help/healthycommunities/" className="plaintext-link ml-2">Mod Policy</a>
-                </div>
-                <div className="row m-0 p-2 pl-3 mb-0 mt-0 pt-0">
-                <p>Reddit Inc © 2019. All rights reserved</p>
-                </div>
-            </div>
-            <div className="row"><a className="reddit-button mx-auto p-3 text-nowrap text-center " href="#top" style={{width: "130px"}}>BACK TO TOP</a></div>
+            <ModeratorsCard openModal={this.openModal}/>
+            <NavigationCard/>
+            <div className="row"><a className="reddit-button mx-auto p-3 text-nowrap text-center" href="#top" style={{width: "130px"}}>BACK TO TOP</a></div>
           </div>
           <div className="col-xl-2 p-0 m-0" id="right-margin"></div>
         </div>
@@ -268,6 +186,128 @@ class PageHeader extends React.Component{
       </div>
     </div>
   </header>
+  }
+}
+class ModeratorsCard extends React.Component{
+  constructor(props){
+    super(props);
+    this.state = {};
+    this.openModal = this.openModal.bind(this);
+  }
+  openModal(){
+    this.props.openModal();
+  }
+  render(){
+    return <div className="row rounded bg-white m-0 mt-3 mb-3">
+    <div className="row col-xl-12 m-0 bg-secondary d-inline p-3 text-white rounded-top">
+      <strong >Moderators</strong>
+      <div className="float-right force-pointer" onClick={this.openModal}><i className="fas fa-envelope"></i></div>
+    </div>
+    <div className="row m-0 p-3 d-block">
+      <a href="https://www.reddit.com/user/GoreFox/" className="d-inline modlist-link m-2">u/GoreFox</a>
+      <label className="bg-flairtext modlist-flairtext">Trashpanda Enthusiast</label>
+      <a href="https://www.reddit.com/user/JanetYellensFuckboy/" className="d-inline modlist-link m-2">u/JanetYellensFuckboy</a>
+      <label className="bg-flairtext modlist-flairtext d-inline">takes credit for Guardia...</label>
+      <a href="https://www.reddit.com/user/BotBust/" className="d-block modlist-link m-2">u/BotBust</a>
+      <a href="https://www.reddit.com/user/tsmaster777/" className="d-block modlist-link m-2">u/tsmaster777</a>
+      <a href="https://www.reddit.com/user/PapaTrashusPandusI/" className="d-inline modlist-link m-2">u/PapaTrashusPandusI</a>
+      <label className="bg-flairtext modlist-flairtext mb-0">Lucipurrrr we are here</label>
+      <a href="https://www.reddit.com/user/urbanspacecowboy/" className="d-block modlist-link  m-2">u/urbanspacecowboy</a>
+      <a href="https://www.reddit.com/user/BotTerminator/" className="d-block modlist-link m-2">u/BotTerminator</a>
+      <a href="https://www.reddit.com/user/BotDefense/" className="d-block modlist-link m-2">u/BotDefense</a>
+      <a href="https://www.reddit.com/r/trashpandas/about/moderators/" className="d-block text-right modlist-link m-3">VIEW ALL MODERATORS</a>
+    </div>
+  </div>
+  }
+}
+class AboutCommunityCard extends React.Component{
+  constructor(props){
+    super(props);
+    this.state = {};
+  }
+  render(){
+    return <div className="row rounded bg-white m-0 mb-3" id="static-title-card">
+    <strong className="row col-xl-12 m-0 bg-secondary p-3 text-white rounded-top">About Community</strong>
+    <p className="p-3">Welcome to r/trashpandas: Your home for all things trashpanda-related! Here at r/trashpandas, we strive to share the cutest & *most awesomest* content there is! #🦝🦝🦝🦝🦝🦝🦝🦝🦝🦝🦝</p>
+    <div className="row m-0 p-0 w-100">
+      <div className="col-xl-5 m-0">
+        <h5 className="mb-0">229k</h5><small className="mt-0">Members</small>
+      </div>
+      <div className="col-xl-7 m-0">
+        <h5 className="mb-0">130</h5><small className="mt-0">Online</small>
+      </div>
+    </div>
+    <hr className="row mx-auto" width="90%"></hr>
+    <div className="row w-100 m-0 p-0 mb-3">
+      <img className="col-xl-2 img-fluid m-0 font-weight-light" alt="Birthday Cake" src={BirthdayCake}/>
+    <label className="col-xl-10 p-0 pt-2 h5">Created July 11, 2015</label>
+    </div>
+</div> 
+  }
+}
+class RulesCard extends React.Component{
+  constructor(props){
+    super(props);
+    this.state = {};
+  }
+  render(){
+    return <div className="row rounded bg-white m-0 mt-3 mb-3">
+    <strong className="row col-xl-12 m-0 bg-secondary p-3 text-white rounded-top">r/trashpandas Rules</strong>
+    <ol className="m-1 pl-4 pr-4 pt-2 pb-2 container-fluid">
+      <CollapsableMenuItemOne/>
+      <hr className="row m-2 mx-auto divider"></hr>
+      <li className="plaintext">All posts must pertain to trashpandas</li>
+      <hr className="row mx-auto m-2"></hr>
+      <CollapsableMenuItemThree/>
+      <hr className="row mx-auto m-2"></hr>
+      <CollapsableMenuItemSimple title="No trashpanda marraige proposals" text="No pictures of giving rings to trashpandas. This engagement is off. We've seen this post many times here, and we needn't see it anymore. Just go to Las Vegas."/>
+      <hr className="row mx-auto m-2"></hr>
+      <li className="plaintext">No merchandise</li>
+      <hr className="row mx-auto m-2"></hr>
+      <CollapsableMenuItemSimple title="No profanity" text="This is a wholesome sub for people of all ages. Please keep profanity to a minimum."/>
+      <hr className="row mx-auto m-2"></hr>
+      <CollapsableMenuItemSimple title="Keep it apolitical" linksrc="https://www.reddit.com/r/trashpandas" linktext="r/trashpandas " text="supersede politics. Please don't bring politics into this subreddit."/>
+      <hr className="row mx-auto m-2"></hr>
+      <CollapsableMenuItemSimple title="No Bamboozlement" text="Any users caught bamboozling us will be banned. Please don't bamboozle."/>
+    </ol>
+  </div>
+  }
+}
+class NavigationCard extends React.Component{
+  constructor(props){
+    super(props);
+    this.state = {};
+  }
+  render(){
+    return <div className="row rounded bg-white m-0 mt-3">
+    <div className="col-xl-5 p-3">
+      <label className="font-weight-bold d-block">Reddit</label>
+      <a href="https://about.reddit.com/" className="d-block plaintext-link">About</a>
+      <a href="https://about.reddit.com/careers/" className="d-block plaintext-link">Careers</a>
+      <a href="https://about.reddit.com/press/" className="d-block plaintext-link">Press</a>
+      <a href="https://www.redditinc.com/advertising" className="d-block plaintext-link">Advertise</a>
+      <a href="http://www.redditblog.com/" className="d-block plaintext-link">Blog</a>
+    </div>
+    <div className="col-xl-7 p-3">
+      <label className="font-weight-bold">Using Reddit</label>
+      <a href="https://www.reddithelp.com/" className="d-block plaintext-link">Help</a>
+      <a href="https://www.reddit.com/mobile/download" className="d-bloc plaintext-link">Reddit App</a>
+      <a href="https://www.reddit.com/coins" className="d-block plaintext-link">Reddit Coins</a>
+      <a href="https://www.reddit.com/premium" className="d-block plaintext-link">Reddit Premium</a>
+      <a href="http://redditgifts.com/" className="d-block plaintext-link">Reddit Gifts</a>
+      <a href="https://www.reddit.com/subreddits/a-1/" className="d-block plaintext-link">Communities</a>
+      <a href="https://www.reddit.com/posts/a-1/" className="d-block plaintext-link">Top Posts</a>
+    </div>
+    <div className="row m-0 pl-3 mb-3 mt-3 pb-0">
+      <a href="https://www.redditinc.com/policies/user-agreement" className="plaintext-link mr-2">Terms</a><span>|</span>
+      <a href="https://www.redditinc.com/policies/content-policy" className="plaintext-link mr-2 ml-2">Content Policy</a><span>|</span>
+      <a href="https://www.reddit.com/help/privacypolicy" className="plaintext-link mr-2 ml-2">Privacy Policy</a><span>|</span>
+      <a href="https://www.reddit.com/help/healthycommunities/" className="plaintext-link ml-2">Mod Policy</a>
+    </div>
+    <div className="row m-0 p-2 pl-3 mb-0 mt-0 pt-0">
+    <p>Reddit Inc © 2019. All rights reserved</p>
+    </div>
+</div>
   }
 }
 class PostHeader extends React.Component{
@@ -440,7 +480,7 @@ class PostFooter extends React.Component{
     return <div className="container-fluid row p-0 p-1 m-0">
       <ScoreBar score={this.props.score} openModal={this.props.openModal} location="footer"/>
       <div className="m-0 d-inline">
-        <button className="footer-menu-button m-1 ml-0 pl-0 h-100 my-auto" onClick={this.modalClick}><i className="fas fa-comment-alt mr-1"></i>{this.props.num_comments} Comments</button>
+        <button className="footer-menu-button m-1 ml-0 h-100 my-auto" onClick={this.modalClick}><i className="fas fa-comment-alt mr-1"></i>{this.props.num_comments} Comments</button>
       </div>
       <div className="m-0 d-inline">
         <button className="footer-menu-button m-1 h-100 my-auto" onClick={this.shareClick} id="share-button"><i className="fas fa-share mr-1"></i>Share</button>
@@ -451,7 +491,7 @@ class PostFooter extends React.Component{
         <button className="footer-menu-button m-1 h-100 my-auto" onClick={this.modalClick}><i className="fas fa-folder-plus mr-1" ></i>Save</button>
       </div>
       <div className="m-0 d-inline">
-        <button className="footer-menu-button m-1 h-100 my-auto" onClick={this.moreClick} id="more-button"><i className="fas fa-ellipsis-h"></i></button>
+        <button id="more-button" className="footer-menu-button m-1 h-100 my-auto" onClick={this.moreClick}><i className="fas fa-ellipsis-h"></i></button>
         <button id="more-drop-1" onClick={this.modalClick} className={this.state.moreMenuIsVisible ? "footer-drop-menu-item d-block ml-1 mt-n1" : "d-none"}><i className="fas fa-flag mr-2"></i>Hide</button>
         <button id="more-drop-2" onClick={this.modalClick} className={this.state.moreMenuIsVisible ? "footer-drop-menu-item d-block ml-1 border-bottom-2 mt-4" : "d-none"}><i className="fas fa-ban mr-2"></i>Report</button>
       </div>
