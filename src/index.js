@@ -11,6 +11,7 @@ import SidebarPanda from './sidebarpanda.jpg';
 import upcarot from './upcarot.png';
 import downcarot from './downcarot.png';
 
+//Modal component settings
 Modal.setAppElement("#app")
 const customModalStyles = {
   content : {
@@ -23,6 +24,8 @@ const customModalStyles = {
     transform: 'translate(-50%, -50%)'
   }
 };
+
+//Some helper functions
 const removeNulls_Duplicates = (arr)=>{
   var cleanArray = arr.filter((el)=> {
       return el != null;
@@ -64,6 +67,12 @@ const doesPropertyExist = (prop)=>{
   }
   return true;
 }
+const truncateString = (length, text)=>{
+  var shortText = text.substring(0, length-1) + "..."
+  return shortText;
+}
+
+//parent component
 class Reddit extends React.Component{
   constructor(props) {
     super(props);
@@ -155,7 +164,6 @@ class Reddit extends React.Component{
             <div className="row rounded bg-white m-0 mt-3 mb-3" id="static-filter-card">
               <strong className="row col-xl-12 m-0 bg-secondary p-3 text-white rounded-top">Filter by flair</strong>
               <div className="row m-0 p-3 w-100">
-              {/*FLAIR TAGS*/}
                 <FlairMenu openModal={this.openModal} array={this.state.flair_tags}/>
               </div>
             </div>
@@ -259,6 +267,8 @@ class Reddit extends React.Component{
     );
   }
 }
+
+//child components
 class PostBody extends React.Component{
   constructor(props){
     super(props);
@@ -273,8 +283,10 @@ class PostBody extends React.Component{
       return <div className="container-fluid m-0 p-0"><VideoPost media={this.props.content.media} url={this.props.content.url}/></div>
     }else if(this.props.content.link_flair_text === "question"){
       return <div className="container-fluid m-0 p-0"><QuestionPost text={this.props.content.selftext}/></div>
+    }else if(this.props.content.link_flair_text === "meta"){
+      return <div></div>
     }else{
-      return null
+      return <div className="container-fluid m-0 p-0"><LinkPost url={this.props.content.url} thumbnail={this.props.content.thumbnail}/></div>
     }
   }
 }
@@ -283,7 +295,7 @@ class VideoPost extends React.Component{
     super(props);
     this.state = {}
   }
-  render(){
+  render(){ //It would be great to use the video-react component here
     return <div className="container fluid">
       <video controls autoPlay="" type="video/mp4" className="embed-responsive" src={this.props.media.reddit_video.fallback_url}></video>
     </div>
@@ -309,6 +321,24 @@ class QuestionPost extends React.Component{
     return <div className="container-fluid pl-0 pt-2">
       <p className="post-text">{this.props.text}</p>
     </div>
+  }
+}
+class LinkPost extends React.Component{
+  constructor(props){
+    super(props);
+    this.state = {}
+  }
+  render(){ 
+    if(this.props.thumbnail === "self"){
+      return <div className="container-fluid pl-0 pt-2">
+      <a href={this.props.url} className="post-text d-inline modlist-link">{truncateString(40,this.props.url)}</a>
+      </div>
+    } else {
+      return <div className="container-fluid pl-0 pt-2">
+      <a href={this.props.url} className="post-text d-inline modlist-link">{truncateString(40,this.props.url)}</a>
+      <img className="img-responsive float-right d-inline" src={this.props.thumbnail} alt="thumbnail"></img>
+    </div>
+    }
   }
 }
 class CrossPost extends React.Component{
@@ -473,4 +503,6 @@ class CollapsableMenuItemSimple extends React.Component{
   </li>
   }
 }
+
+//React DOM render
 ReactDOM.render(<Reddit />, document.getElementById("app")); 
