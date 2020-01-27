@@ -105,46 +105,26 @@ class Reddit extends React.Component{
   render() {
     return (
       <div className="container-fluid">
-        <header>
-          <div className="row bg-black p-5"></div>
-          <div className="row">
-            <div className="col-xl-2 p-0 m-0" id="header-left-margin"></div>
-            <div className="col-xl-10 col-lg-12 d-inline" id="header-content ">
-              <div className="d-inline mr-0 pr-0" id="header-left-image">
-                <img className="header-image rounded-circle float-left" src={logo} alt="Raccoon Icon"/>
-              </div>
-              <h1 className="pb-0 mb-0 d-inline">Trashpandas</h1>
-              <button className="reddit-button ml-sm-5 p-2 d-inline" onClick={this.openModal} style={{width: "90px"}}>JOIN</button>
-              <small className="pt-0 mt-0 d-block">A small portfoio app by Nate Krieger</small>
-            </div>
-          </div>
-        </header>
-
+        <PageHeader/>
         <div className="row bg-background" id="main-container">
           <div className="col-xl-2 p-0 m-0" id="left-margin"></div>
-          <div className="col-xl-5">
+          <div className="col-xl-5 m-0 p-0">
             {<ul className="m-0 p-0">
               {this.state.posts.map(post => {
               return <div className="m-1 p-0  post-container bg-light rounded" key={post.id}>
-                  <div className="row m-0 mt-3 mb-3 bg-white rounded">
-                    <div className="col-lg-1 d-inline bg-light text-center m-0 p-0 rounded-left score-container">
-                      <button className="rounded arrow-up-container m-0" onClick={this.openModal}><i className="fas fa-arrow-up"></i></button>
-                      <div className="m-0 p-0 score-text">{roundToThousands(post.score)}</div>
-                      <button className="rounded arrow-down-container mb-0" onClick={this.openModal}><i className="fas fa-arrow-down"></i></button>
-                    </div>
+                  <div className="row m-0 mt-3 mb-md-3 bg-white rounded">
+                    <ScoreBar score={post.score} openModal={this.openModal} location="sidebar"/>
                   <div className="col-lg-11 d-inline p-0" id="post-main">
-                  <div className="lightweight-text text-secondary post-header-text">Posted by u/{post.author} <div className="bg-flairtext text-dark d-inline">{post.author_flair_text} </div><TimeAgo datetime={post.created * 1000}/></div>
-                  {doesPropertyExist(post.link_flair_text) ? <div className="badge badge-pill p-2 badge-light d-inline p-0 m-0">{post.link_flair_text}</div> : null}
-                  <h5 className="pl-0 pt-3 pb-3 d-inline">{post.title}</h5>
-                  <PostBody content={post}/>
-                  <PostFooter content={post} openModal={this.openModal} closeModal={this.closeModal}/>
+                    <PostHeader author={post.author} author_flair_text={post.author_flair_text} created={post.created} link_flair_text={post.link_flair_text} title={post.title}/>
+                    <PostBody content={post}/>
+                    <PostFooter num_comments={post.num_comments} score={post.score} openModal={this.openModal}/>
                   </div>   
                 </div>
               </div>;})}
-              </ul>}
+            </ul>}
           </div>
-          <div className="col-xl-3 p-0 m-0" id="static-content-container">
-            <div className="row rounded bg-white m-0 mt-3 mb-3" id="static-title-card">
+          <div className="col-xl-3 p-0 mt-3 pl-4 m-0" id="static-content-container">
+            <div className="row rounded bg-white m-0 mb-3" id="static-title-card">
                 <strong className="row col-xl-12 m-0 bg-secondary p-3 text-white rounded-top">About Community</strong>
                 <p className="p-3">Welcome to r/trashpandas: Your home for all things trashpanda-related! Here at r/trashpandas, we strive to share the cutest & *most awesomest* content there is! #🦝🦝🦝🦝🦝🦝🦝🦝🦝🦝🦝</p>
                 <div className="row m-0 p-0 w-100">
@@ -267,8 +247,68 @@ class Reddit extends React.Component{
     );
   }
 }
-
 //child components
+class PageHeader extends React.Component{
+  constructor(props){
+    super(props);
+    this.state = {};
+  }
+  render(){
+    return <header>
+    <div className="row bg-black p-5"></div>
+    <div className="row">
+      <div className="col-xl-2 p-0 m-0" id="header-left-margin"></div>
+      <div className="col-xl-10 col-lg-12 d-inline" id="header-content ">
+        <div className="d-inline mr-0 pr-0" id="header-left-image">
+          <img className="header-image rounded-circle float-left" src={logo} alt="Raccoon Icon"/>
+        </div>
+        <h1 className="pb-0 mb-0 d-inline">Trashpandas</h1>
+        <button className="reddit-button ml-sm-5 p-2 d-inline" onClick={this.openModal} style={{width: "90px"}}>JOIN</button>
+        <small className="pt-0 mt-0 d-block">A small portfoio app by Nate Krieger</small>
+      </div>
+    </div>
+  </header>
+  }
+}
+class PostHeader extends React.Component{
+  constructor(props){
+    super(props);
+    this.state = {};
+  }
+  render(){
+    return <div className="m-0 p-0 pt-1 pb-1">
+      <div className="lightweight-text text-secondary post-header-text pl-2">Posted by u/{this.props.author} 
+      <div className="bg-flairtext text-dark d-inline pl-1">{this.props.author_flair_text} </div><TimeAgo datetime={this.props.created * 1000}/></div>
+      {doesPropertyExist(this.props.link_flair_text) ? <div className="badge badge-pill p-2 badge-light d-inline p-0 m-0">{this.props.link_flair_text}</div> : null}
+      <h5 className="p-2 d-inline">{this.props.title}</h5>
+    </div>
+  }
+}
+class ScoreBar extends React.Component{
+  constructor(props){
+    super(props);
+    this.state = {};
+    this.openModal = this.openModal.bind(this);
+  }
+  openModal(){
+    this.props.openModal();
+  }
+  render(){
+    if(this.props.location === "sidebar"){
+      return <div className="col-lg-1 bg-light text-center m-0 p-2 rounded-left score-container d-none d-lg-inline" id="post-score-sidebar">
+        <button className="rounded arrow-up-container m-0" onClick={this.openModal}><i className="fas fa-arrow-up"></i></button>
+        <div className="m-0 p-0 score-text d-block mx-auto text-center">{roundToThousands(this.props.score)}</div>
+        <button className="rounded arrow-down-container mb-0" onClick={this.openModal}><i className="fas fa-arrow-down"></i></button>
+      </div>
+    } else {
+      return <div className="text-center m-1 score-container d-inline d-lg-none" id="post-score-sidebar">
+        <button className="rounded arrow-up-container m-0 d-inline" onClick={this.openModal}><i className="fas fa-arrow-up"></i></button>
+        <div className="m-0 p-0 score-text d-inline">{roundToThousands(this.props.score)}</div>
+        <button className="rounded arrow-down-container mb-0 d-inline" onClick={this.openModal}><i className="fas fa-arrow-down"></i></button>
+    </div>
+    }
+  }
+}
 class PostBody extends React.Component{
   constructor(props){
     super(props);
@@ -282,11 +322,11 @@ class PostBody extends React.Component{
     }else if(this.props.content.is_video === true){
       return <div className="container-fluid m-0 p-0"><VideoPost media={this.props.content.media} url={this.props.content.url}/></div>
     }else if(this.props.content.link_flair_text === "question"){
-      return <div className="container-fluid m-0 p-0"><QuestionPost text={this.props.content.selftext}/></div>
+      return <div className="container-fluid m-0 p-0 pl-2"><QuestionPost text={this.props.content.selftext}/></div>
     }else if(this.props.content.link_flair_text === "meta"){
       return <div></div>
     }else{
-      return <div className="container-fluid m-0 p-0"><LinkPost url={this.props.content.url} thumbnail={this.props.content.thumbnail}/></div>
+      return <div className="container-fluid m-0 p-0 pl-2"><LinkPost url={this.props.content.url} thumbnail={this.props.content.thumbnail}/></div>
     }
   }
 }
@@ -307,8 +347,8 @@ class ImagePost extends React.Component{
     this.state = {}
   }
   render(){
-    return <div className="container-fluid p-0">
-      <img src={this.props.images.source.url} alt="" className="img-fluid mx-auto"></img>
+    return <div className="p-0 mx-auto">
+      <img src={this.props.images.source.url} alt="post image" className="img-fluid mx-auto d-block"></img>
     </div>
   }
 }
@@ -397,16 +437,21 @@ class PostFooter extends React.Component{
     document.getElementById('share-drop-1').style.left = this.shareMenuLocation.left;
   } 
   render(){
-    return <div className="container-fluid row p-0 m-0">
-      <button className="footer-menu-button m-1 ml-0 pl-0 shadow-none" onClick={this.modalClick}><i className="fas fa-comment-alt mr-1"></i>{this.props.content.num_comments} Comments</button>
-      <div className="m-0 p-0 d-inline">
-        <button className="footer-menu-button m-1" onClick={this.shareClick} id="share-button"><i className="fas fa-share mr-1"></i>Share</button>
+    return <div className="container-fluid row p-0 p-1 m-0">
+      <ScoreBar score={this.props.score} openModal={this.props.openModal} location="footer"/>
+      <div className="m-0 d-inline">
+        <button className="footer-menu-button m-1 ml-0 pl-0 h-100 my-auto" onClick={this.modalClick}><i className="fas fa-comment-alt mr-1"></i>{this.props.num_comments} Comments</button>
+      </div>
+      <div className="m-0 d-inline">
+        <button className="footer-menu-button m-1 h-100 my-auto" onClick={this.shareClick} id="share-button"><i className="fas fa-share mr-1"></i>Share</button>
         <button id="share-drop-1" onClick={this.modalClick} className={this.state.shareMenuIsVisible ? "footer-drop-menu-item d-block ml-1 mt-n1" : "d-none"}><i className="fas fa-link mr-2"></i>Copy Text</button>
         <button id="share-drop-2" onClick={this.modalClick} className={this.state.shareMenuIsVisible ? "footer-drop-menu-item border-bottom-2 d-block ml-1 mt-4" : "d-none"}><i className="fas fa-code ml-n1 mr-2"></i>Embed</button>
       </div>
-      <button className="footer-menu-button m-1" onClick={this.modalClick}><i className="fas fa-folder-plus mr-1" ></i>Save</button>
-      <div className="m-0 p-0 d-inline">
-        <button className="footer-menu-button m-1" onClick={this.moreClick} id="more-button"><i className="fas fa-ellipsis-h"></i></button>
+      <div className="m-0 d-inline">
+        <button className="footer-menu-button m-1 h-100 my-auto" onClick={this.modalClick}><i className="fas fa-folder-plus mr-1" ></i>Save</button>
+      </div>
+      <div className="m-0 d-inline">
+        <button className="footer-menu-button m-1 h-100 my-auto" onClick={this.moreClick} id="more-button"><i className="fas fa-ellipsis-h"></i></button>
         <button id="more-drop-1" onClick={this.modalClick} className={this.state.moreMenuIsVisible ? "footer-drop-menu-item d-block ml-1 mt-n1" : "d-none"}><i className="fas fa-flag mr-2"></i>Hide</button>
         <button id="more-drop-2" onClick={this.modalClick} className={this.state.moreMenuIsVisible ? "footer-drop-menu-item d-block ml-1 border-bottom-2 mt-4" : "d-none"}><i className="fas fa-ban mr-2"></i>Report</button>
       </div>
