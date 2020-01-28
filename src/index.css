@@ -99,6 +99,9 @@ html, body {
 .post-header-text{
   font-size: .75em;
 }
+#static-content-container{
+  height: 200px;
+}
 .footer-menu-button{
   box-shadow: 0 0px;
   border: 0px;

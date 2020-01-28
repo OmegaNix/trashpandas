@@ -13,14 +13,22 @@ import downcarot from './downcarot.png';
 
 //Modal component settings
 Modal.setAppElement("#app")
-const customModalStyles = {
+const desktopModalStyles = {
   content : {
     top: '50%',
     left: '50%',
     right: 'auto',
     bottom: 'auto',
-    width: '60%',
     marginRight: '-50%',
+    padding: '5px',
+    transform: 'translate(-50%, -50%)'
+  }
+};
+const mobileModalStyles = {
+  content : {
+    top: '50%',
+    width: '100%',
+    padding: '5px',
     transform: 'translate(-50%, -50%)'
   }
 };
@@ -76,15 +84,30 @@ const truncateString = (length, text)=>{
 class Reddit extends React.Component{
   constructor(props) {
     super(props);
- 
     this.state = {
       posts: [],
       flair_tags: [],
       modalIsOpen: false,
+      screenWidth: null,
     };
     this.openModal = this.openModal.bind(this);
     this.afterOpenModal = this.afterOpenModal.bind(this);
     this.closeModal = this.closeModal.bind(this);
+    this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
+  }
+  componentDidMount() {
+    axios.get(`https://www.reddit.com/r/trashpandas.json?raw_json=1`).then(res => {
+      const posts = res.data.data.children.map(obj => obj.data);
+      const flair_tags = removeNulls_Duplicates(res.data.data.children.map(obj => obj.data.link_flair_text));
+      window.addEventListener("resize", this.updateWindowDimensions());
+      this.setState({ posts, flair_tags });
+    });
+  };
+  componentWillUnmount() {
+    window.removeEventListener("resize", this.updateWindowDimensions)
+  }
+  updateWindowDimensions() {
+    this.setState({ screenWidth: window.innerWidth });
   }
   openModal() {
     this.setState({modalIsOpen: true});
@@ -95,26 +118,19 @@ class Reddit extends React.Component{
   closeModal() {
     this.setState({modalIsOpen: false});
   }
-  componentDidMount() {
-    axios.get(`https://www.reddit.com/r/trashpandas.json?raw_json=1`).then(res => {
-      const posts = res.data.data.children.map(obj => obj.data);
-      const flair_tags = removeNulls_Duplicates(res.data.data.children.map(obj => obj.data.link_flair_text));
-      this.setState({ posts, flair_tags });
-    });
-  };
   render() {
     return (
       <div className="container-fluid">
-        <PageHeader/>
+        {this.state.screenWidth > 1000 ? <DesktopPageHeader/> : <MobilePageHeader/>}
         <div className="row bg-background" id="main-container">
           <div className="col-xl-2 p-0 m-0" id="left-margin"></div>
           <div className="col-xl-5 m-0 p-0">
             {<ul className="m-0 p-0">
               {this.state.posts.map(post => {
-              return <div className="m-1 p-0  post-container bg-light rounded" key={post.id}>
-                  <div className="row m-0 mt-3 mb-md-3 bg-white rounded">
+              return <div className="m-0 p-0  post-container bg-light rounded" key={post.id}>
+                  <div className="row m-0 mt-1 mt-xl-3 mb-0 bg-white rounded">
                     <ScoreBar score={post.score} openModal={this.openModal} location="sidebar"/>
-                  <div className="col-lg-11 d-inline p-0" id="post-main">
+                  <div className="col-lg-11 d-inline p-0">
                     <PostHeader author={post.author} author_flair_text={post.author_flair_text} created={post.created} link_flair_text={post.link_flair_text} title={post.title}/>
                     <PostBody content={post}/>
                     <PostFooter num_comments={post.num_comments} score={post.score} openModal={this.openModal}/>
@@ -123,7 +139,7 @@ class Reddit extends React.Component{
               </div>;})}
             </ul>}
           </div>
-          <div className="col-xl-3 p-0 mt-3 pl-4 m-0" id="static-content-container">
+          <div className="col-xl-3 p-0 mt-3 pl-xl-4 m-0" id="static-content-container">
             <AboutCommunityCard/>
             <div className="row rounded bg-white m-0 mt-3 mb-3">
               <strong className="row col-xl-12 m-0 bg-secondary p-3 text-white rounded-top">Filter by flair</strong>
@@ -131,12 +147,12 @@ class Reddit extends React.Component{
                 <FlairMenu openModal={this.openModal} array={this.state.flair_tags}/>
               </div>
             </div>
-            <div className="row w-100 m-0 p-0 mb-3">
+            <div className="row w-100 m-0 p-0 mb-3 d-none d-xl-block">
                 <img src={SidebarPanda} className="img-fluid rounded" alt="Smiling Raccoon"/>
             </div>
             <RulesCard/>
             <div className="row w-100 m-0 p-0 mb-3">
-                <img src={SidebarPanda} className="img-fluid rounded vertical-flip" alt="Upsidown Smiling Raccoon"/>
+                <img src={SidebarPanda} className="img-fluid rounded vertical-flip d-none d-xl-block" alt="Upsidown Smiling Raccoon"/>
             </div>
             <ModeratorsCard openModal={this.openModal}/>
             <NavigationCard/>
@@ -145,18 +161,17 @@ class Reddit extends React.Component{
           <div className="col-xl-2 p-0 m-0" id="right-margin"></div>
         </div>
           <div className="container-fluid">
-            <Modal isOpen={this.state.modalIsOpen} onAfterOpen={this.afterOpenModal} style={customModalStyles} onRequestClose={this.closeModal}>
-                <h4 className="mt-2 mb-0 text-center" ref={subtitle => this.subtitle = subtitle}>This feature has not been implimented...</h4>
+            <Modal isOpen={this.state.modalIsOpen} onAfterOpen={this.afterOpenModal} style={this.state.screenWidth<1000 ? mobileModalStyles : desktopModalStyles} onRequestClose={this.closeModal}>
+                <i className="float-right far fa-window-close p-0 force-pointer p-2 p-xl-0" onClick={this.closeModal}></i>
+                <h4 className="m-2 text-center" ref={subtitle => this.subtitle = subtitle}>This feature has not been implimented...</h4>
                 <h6 className="text-center m-0 p-0">Thank you for taking the time to check out my project.</h6>
                 <hr/>
-                <div className="container row">
-                  <p>My name is Nate Krieger and I am a web developer currently looking for work.  I am passionate about all things Javascript (and raccoons!)  Before I built this page, my portfolio was full of fun NodeJS bot projects, but it lacked anything which demonstrated my ability to work on the front-end, where javascript is king.  I build this clone of /r/trashpandas with the goal of recreating the original page as accurately as possible using React and Bootstrap 4.</p>
-                  <p>There are some features of this page which would typically prompt you to sign into your Reddit account.  While I am capable of building an OAuth portal which would allow you to use my mirror site with your Reddit account, it was outside of what I wanted to accomplish for this piece, which was to showcase my ability to meticulously reproduce the design and UI features of Reddit using custom React components and the Bootstrap 4 stylesheet. </p>
-                  <p>I didn’t use any of the behavioral features of Bootstrap (which require jQuery and are unpredictable in JSX) and the only prefabricated component I am using is this modal box.  It is also worth noting that I used an icon font instead of inline SVG for the iconography on the site, so my icons differ slightly from the original.</p>
-                  <div className="text-center p-0 m-0 d-inline row align-center mx-auto">
+                <div className="container row m-0 p-0">
+                  <div className="text-center p-0 m-0 d-inline row d-block align-center mx-auto">
                     <a href="https://www.github.com/omeganix" className="p-1 modal-footer-icon"><i className="fab fa-github-square"></i></a>
                     <a href="mailto:n.t.krieger@gmail.com" className="p-1 modal-footer-icon"><i className="fas fa-envelope-square"></i></a>
                     <a href="https://www.linkedin.com/in/ntkrieger" className="p-1 modal-footer-icon"><i className="fab fa-linkedin"></i></a>
+                    <label className="d-block text-center">Get in Touch!</label>
                   </div>
                 </div>
             </Modal>
@@ -166,7 +181,7 @@ class Reddit extends React.Component{
   }
 }
 //child components
-class PageHeader extends React.Component{
+class DesktopPageHeader extends React.Component{
   constructor(props){
     super(props);
     this.state = {};
@@ -181,10 +196,35 @@ class PageHeader extends React.Component{
           <img className="header-image rounded-circle float-left" src={logo} alt="Raccoon Icon"/>
         </div>
         <h1 className="pb-0 mb-0 d-inline">Trashpandas</h1>
-        <button className="reddit-button ml-sm-5 p-2 d-inline" onClick={this.openModal} style={{width: "90px"}}>JOIN</button>
+        <button className="reddit-button ml-sm-5 p-2 " onClick={this.openModal} style={{width: "80%"}}>JOIN</button>
         <small className="pt-0 mt-0 d-block">A small portfoio app by Nate Krieger</small>
       </div>
     </div>
+  </header>
+  }
+}
+class MobilePageHeader extends React.Component{
+  constructor(props){
+    super(props);
+    this.state = {};
+  }
+  render(){
+    return <header>
+    <div className="bg-black d-block p-5 row"></div>
+    <img className="rounded-circle d-block mx-auto mt-n4" style={{width: "25%", height: "25%"}} src={logo} alt="Raccoon Icon"/>
+    <h1 className="d-block mb-0 mt-n3 text-center mx-auto">Trashpandas</h1>
+    <small className="pt-0 mb-3 mt-0 text-center d-block mx-auto">A small portfoio app by Nate Krieger</small>
+    <p className="post-header-text text-color-gray text-center">Welcome to r/trashpandas: Your home for all things trashpanda-related! Here at r/trashpandas, we strive to share the cutest & *most awesomest* content there is! #🦝🦝🦝🦝🦝🦝🦝🦝🦝🦝🦝</p>
+    <span className="text-center d-block mx-auto">
+      <strong>231K </strong>
+      <label>Members ·</label>
+      <strong> 130 </strong>
+      <label>Online</label>
+    </span>
+    <button className="reddit-button d-block mx-auto p-1 m-2" style={{width: "75%"}} onClick={this.openModal}>Join Community</button> 
+        
+        
+
   </header>
   }
 }
@@ -199,7 +239,7 @@ class ModeratorsCard extends React.Component{
   }
   render(){
     return <div className="row rounded bg-white m-0 mt-3 mb-3">
-    <div className="row col-xl-12 m-0 bg-secondary d-inline p-3 text-white rounded-top">
+    <div className="row col-xl-12 m-0 bg-secondary d-inline p-3 text-white rounded-top d-none d-xl-block">
       <strong >Moderators</strong>
       <div className="float-right force-pointer" onClick={this.openModal}><i className="fas fa-envelope"></i></div>
     </div>
@@ -226,7 +266,7 @@ class AboutCommunityCard extends React.Component{
     this.state = {};
   }
   render(){
-    return <div className="row rounded bg-white m-0 mb-3" id="static-title-card">
+    return <div className="row rounded bg-white m-0 mb-3 d-none d-xl-block" id="static-title-card">
     <strong className="row col-xl-12 m-0 bg-secondary p-3 text-white rounded-top">About Community</strong>
     <p className="p-3">Welcome to r/trashpandas: Your home for all things trashpanda-related! Here at r/trashpandas, we strive to share the cutest & *most awesomest* content there is! #🦝🦝🦝🦝🦝🦝🦝🦝🦝🦝🦝</p>
     <div className="row m-0 p-0 w-100">
@@ -251,7 +291,7 @@ class RulesCard extends React.Component{
     this.state = {};
   }
   render(){
-    return <div className="row rounded bg-white m-0 mt-3 mb-3">
+    return <div className="row rounded bg-white m-0 mt-3 mb-3 d-none d-xl-block">
     <strong className="row col-xl-12 m-0 bg-secondary p-3 text-white rounded-top">r/trashpandas Rules</strong>
     <ol className="m-1 pl-4 pr-4 pt-2 pb-2 container-fluid">
       <CollapsableMenuItemOne/>
@@ -320,7 +360,7 @@ class PostHeader extends React.Component{
       <div className="lightweight-text text-secondary post-header-text pl-2">Posted by u/{this.props.author} 
       <div className="bg-flairtext text-dark d-inline pl-1">{this.props.author_flair_text} </div><TimeAgo datetime={this.props.created * 1000}/></div>
       {doesPropertyExist(this.props.link_flair_text) ? <div className="badge badge-pill p-2 badge-light d-inline p-0 m-0">{this.props.link_flair_text}</div> : null}
-      <h5 className="p-2 d-inline">{this.props.title}</h5>
+      <h5 className="pl-2 d-inline">{this.props.title}</h5>
     </div>
   }
 }
