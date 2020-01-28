@@ -191,12 +191,12 @@ class DesktopPageHeader extends React.Component{
     <div className="row bg-black p-5"></div>
     <div className="row">
       <div className="col-xl-2 p-0 m-0" id="header-left-margin"></div>
-      <div className="col-xl-10 col-lg-12 d-inline" id="header-content ">
+      <div className="col-xl-10 col-lg-12 d-inline p-0" id="header-content">
         <div className="d-inline mr-0 pr-0" id="header-left-image">
           <img className="header-image rounded-circle float-left" src={logo} alt="Raccoon Icon"/>
         </div>
         <h1 className="pb-0 mb-0 d-inline">Trashpandas</h1>
-        <button className="reddit-button ml-sm-5 p-2 " onClick={this.openModal} style={{width: "80%"}}>JOIN</button>
+        <button className="reddit-button mt-n2 ml-sm-5 p-2 " onClick={this.openModal} style={{width: "90px"}}>JOIN</button>
         <small className="pt-0 mt-0 d-block">A small portfoio app by Nate Krieger</small>
       </div>
     </div>

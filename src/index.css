@@ -11,10 +11,10 @@ html, body {
   background-color: #ccc;
 }
 .header-image{
-  height: 50px;
-  width: 50px;
+  height: 75px;
+  width: 75px;
   position: relative;
-  top: -10px;
+  top: -20px;
 }
 .vertical-flip{
   transform: rotate(180deg);
@@ -98,9 +98,6 @@ html, body {
 }
 .post-header-text{
   font-size: .75em;
-}
-#static-content-container{
-  height: 200px;
 }
 .footer-menu-button{
   box-shadow: 0 0px;
