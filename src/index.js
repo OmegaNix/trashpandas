@@ -27,7 +27,11 @@ const desktopModalStyles = {
 const mobileModalStyles = {
   content : {
     top: '50%',
-    width: '100%',
+    left: '48%',
+    bottom: 'auto',
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    width: '90%',
     padding: '5px',
     transform: 'translate(-50%, -50%)'
   }
